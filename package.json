@@ -1,0 +1,19 @@
+{
+  "name": "collections-as-data-api",
+  "version": "1.0.0",
+  "description": "Proof of concept API for Collections as Data grant project",
+  "main": "cad-api.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "colletions-as-data-api"
+  },
+  "author": "Jeff Rynhart",
+  "license": "ISC",
+  "dependencies": {
+    "dotenv": "^8.1.0",
+    "express": "^4.17.1"
+  }
+}
