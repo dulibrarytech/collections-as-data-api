@@ -6,5 +6,6 @@ module.exports = {
     appDonmin: process.env.APPLICATION_DOMAIN,
     elasticHost: process.env.ELASTICSEARCH_HOST,
     elasticPort: process.env.ELASTICSEARCH_PORT,
-    elasticIndex: process.env.ELASTICSEARCH_INDEX
+    elasticIndex: process.env.ELASTICSEARCH_INDEX,
+    indexType: process.env.ELASTICSEARCH_INDEX_TYPE
 }

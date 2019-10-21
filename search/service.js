@@ -338,11 +338,11 @@ exports.searchIndex = function(queryData, facets=null, collection=null, pageNum=
 
     // Query the index
     es.search(data, function (error, response, status) {
-      if (error) {
+      if(error) {
         callback(error, {});
       }
       else if(status != 200) {
-        callback("Elastic server returned a status of %s", status);
+        callback("Elastic server returned a status of " + status);
       }
       else {
         callback(null, response) 

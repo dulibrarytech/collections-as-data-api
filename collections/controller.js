@@ -5,8 +5,14 @@ const  	config = require('../config/config'),
     	Helper = require('./helper');
 
 exports.collections = function(req, res) {
-	// Service.getCollectionList()
-	res.send("collections");
+	Service.getCollectionList().catch(error => {
+		console.error(error);
+		res.status(500);
+		res.send(error);
+	})
+	.then(response => {
+		res.send(response);
+	});
 }
 
 exports.collection = function(req, res) {
