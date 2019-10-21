@@ -1,9 +1,3 @@
-/**
- * @file 
- *
- * Collections Routes
- *
- */
 'use strict'
 
 var Collections = require('./controller');
@@ -12,10 +6,18 @@ module.exports = function (app) {
 
     app.route('/')
         .get(function(req, res) {
-            res.redirect("/collections");
+            res.sendStatus(403);
     });
 
-    app.get("/collections", (req, res, next) => {
-        res.json(["John","Paul","George","Ringo"]);
-    });
+    app.route('/collections')
+        .get(Collections.collections);
+
+    app.route('/collections/:collection_id')
+        .get(Collections.collection);
+
+    app.route('/collections/:id/items')
+        .get(Collections.collectionItems);
+
+    app.route('/collections/:collection_id/items/:item_id')
+        .get(Collections.collectionItem);
 };

@@ -2,7 +2,7 @@
 
 const es = require('../config/index'),
       util = require('util'),
-      config = require('../config/' + process.env.CONFIGURATION_FILE),
+      config = require('../config/config'),
       Helper = require("./helper");
 
 /**

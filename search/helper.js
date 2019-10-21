@@ -7,8 +7,7 @@
 
 'use strict';
 
-var config = require('../config/' + process.env.CONFIGURATION_FILE),
-    appHelper = require('../libs/helper');
+var config = require('../config/config');
 
 /**
  * Creates an Elastic 'aggs' query for an Elastic query object 
