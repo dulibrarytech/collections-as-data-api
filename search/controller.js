@@ -1,13 +1,8 @@
 'use strict';
-
-const async = require('async'),
-    config = require('../config/' + process.env.CONFIGURATION_FILE),
-    Service = require('./service.js'),
-    Facets = require('../libs/facets'),
-    Paginator = require('../libs/paginator'),
-    Helper = require('./helper.js'),
-    Metadata = require('../libs/metadata'),
-    Format = require("../libs/format");
+ 
+const  	config = require('../config/config'),
+    	Service = require('./service'),
+    	Helper = require('./helper');
 
 exports.search = function(req, res) {
 	let query = req.query.q || [""],

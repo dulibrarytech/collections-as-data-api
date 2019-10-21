@@ -12,7 +12,7 @@ var express = require('express'),
 module.exports = function () {
     var app = express();
 
-    if (process.env.NODE_ENV === 'production') {
+    if (process.env.NODE_ENV === 'prod') {
         app.use(compress());
     }
 

@@ -4,3 +4,12 @@ A nice project with a nice description
 
 ---
 ## Requirements
+
+## .env
+NODE_ENV=dev|prod
+APPLICATION_PORT=
+APPLICATION_DOMAIN=
+API_KEY=
+ELASTICSEARCH_HOST=
+ELASTICSEARCH_PORT=
+ELASTICSEARCH_INDEX=
