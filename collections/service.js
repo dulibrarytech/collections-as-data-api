@@ -10,6 +10,8 @@ var queryIndex = function(data, callback) {
 	data["type"] = config.indexType;
 	es.search(data, function(error, response, status) {
 		if(error) {
+			console.error("Elastic error: %s", error.message);
+			console.error("Elastic returned a status of: %s", error.statusCode);
 			callback(error, null);
 		}
 		else if(status != 200) {
@@ -35,7 +37,7 @@ exports.getCollectionList = function() {
 		},
 		function(error, response) {
 			if(error) {
-				reject(error);
+				reject("Elastic error: " + error.message);
 			}
 			else {
 				let collections = response.hits.hits || [],
@@ -56,8 +58,10 @@ exports.getCollectionList = function() {
 exports.getCollectionData = function(id) {
 	return new Promise(function(fulfill, reject) {
 		var data = {};
+
+		// Get the collection data
 		queryIndex({
-      		_source: ["title", "description"],
+      		_source: ["title", "description", "abstract"],
       		body: {
       			query: {
       				bool: {
@@ -69,15 +73,37 @@ exports.getCollectionData = function(id) {
 		},
 		function(error, response) {
 			if(error) {
-				reject(error);
+				reject("Elastic error: " + error.message);
 			}
 			else {
 				if(response.hits.hits && response.hits.hits.length > 0) {
 					let collection = response.hits.hits;
-					data["title"] = collection[0].title || "No title";
-					data["description"] = collection[0].abstract || collection[0].description || "No description";
+					data["title"] = collection[0]._source.title || "No title";
+					data["description"] = collection[0]._source.abstract || collection[0]._source.description || "No description";
 				}
-				fulfill(data)
+
+				// Count the members of this collection
+				queryIndex({
+		      		_source: [],
+		      		body: {
+		      			query: {
+		      				bool: {
+		      					must:[{"match_phrase": {"is_member_of_collection": id}}]
+		      				}
+		      			}
+			        }
+				},
+				function(error, response) {
+					if(error) {
+						reject("Elastic error: " + error.message);
+					}
+					else {
+						if(response.hits.hits) {
+							data["item_count"] = response.hits.hits.length;
+						}
+						fulfill(data)
+					}
+				})
 			}
 		})
 	});

@@ -4,11 +4,15 @@ const  	config = require('../config/config'),
     	Service = require('./service'),
     	Helper = require('./helper');
 
+var sendErrorResponse = function(res, error) {
+	console.error(error);
+	res.status(500);
+	res.send(error);
+}
+
 exports.collections = function(req, res) {
 	Service.getCollectionList().catch(error => {
-		console.error(error);
-		res.status(500);
-		res.send(error);
+		sendErrorResponse(res, error);
 	})
 	.then(response => {
 		res.send(response);
@@ -19,9 +23,7 @@ exports.collection = function(req, res) {
 	if(req.params && req.params.id) {
 		let collectionID = req.params.id;
 		Service.getCollectionData(collectionID).catch(error => {
-			console.error(error);
-			res.status(500);
-			res.send(error);
+			sendErrorResponse(res, error);
 		})
 		.then(response => {
 			res.send(response);
