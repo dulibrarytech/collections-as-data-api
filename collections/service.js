@@ -5,11 +5,25 @@ const es = require('../config/index'),
       config = require('../config/config'),
       Helper = require("./helper");
 
+var queryIndex = function(data, callback) {
+	data["index"] = config.elasticIndex;
+	data["type"] = config.indexType;
+	es.search(data, function(error, response, status) {
+		if(error) {
+			callback(error, null);
+		}
+		else if(status != 200) {
+			callback("Elastic server returned a status of " + status, null)
+		}
+		else {
+			callback(null, response);
+		}
+	});
+}
+
 exports.getCollectionList = function() {
 	return new Promise(function(fulfill, reject) {
-		es.search({
-			index: config.elasticIndex,
-      		type: config.indexType,
+		queryIndex({
       		_source: ["pid", "title"],
       		body: {
       			query: {
@@ -19,12 +33,9 @@ exports.getCollectionList = function() {
       			}
 	        }
 		},
-		function(error, response, status) {
+		function(error, response) {
 			if(error) {
 				reject(error);
-			}
-			else if(status != 200) {
-				reject("Elastic server returned a status of " + status)
 			}
 			else {
 				let collections = response.hits.hits || [],
@@ -38,6 +49,6 @@ exports.getCollectionList = function() {
 				}
 				fulfill(list);
 			}
-		});
+		})
 	});
 }
