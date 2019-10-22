@@ -44,10 +44,40 @@ exports.getCollectionList = function() {
 				for(let collection of collections) {
 					list.push({
 						id: collection._source.pid || "",
-						name: collection._source.title || "No title"
+						title: collection._source.title || "No title"
 					})
 				}
 				fulfill(list);
+			}
+		})
+	});
+}
+
+exports.getCollectionData = function(id) {
+	return new Promise(function(fulfill, reject) {
+		var data = {};
+		queryIndex({
+      		_source: ["title", "description"],
+      		body: {
+      			query: {
+      				bool: {
+      					must:[{"match_phrase": {"pid": id}}],
+      					filter: [{"match_phrase": {"object_type": "collection"}}]
+      				}
+      			}
+	        }
+		},
+		function(error, response) {
+			if(error) {
+				reject(error);
+			}
+			else {
+				if(response.hits.hits && response.hits.hits.length > 0) {
+					let collection = response.hits.hits;
+					data["title"] = collection[0].title || "No title";
+					data["description"] = collection[0].abstract || collection[0].description || "No description";
+				}
+				fulfill(data)
 			}
 		})
 	});

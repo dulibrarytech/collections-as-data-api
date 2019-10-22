@@ -17,6 +17,8 @@ module.exports = function () {
     }
 
     require('../collections/routes.js')(app);
+    //require('../collections/routes/api_v1.js')(app);
+
     require('../search/routes.js')(app);
 
     return app;

@@ -16,8 +16,20 @@ exports.collections = function(req, res) {
 }
 
 exports.collection = function(req, res) {
-	// Service.getCollectionData(collectionID)
-	res.send("collection");
+	if(req.params && req.params.id) {
+		let collectionID = req.params.id;
+		Service.getCollectionData(collectionID).catch(error => {
+			console.error(error);
+			res.status(500);
+			res.send(error);
+		})
+		.then(response => {
+			res.send(response);
+		});
+	}
+	else {
+		res.sendStatus(400);
+	}
 }
 
 exports.collectionItems = function(req, res) {

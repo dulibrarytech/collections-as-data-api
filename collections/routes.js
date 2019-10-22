@@ -4,6 +4,12 @@ var Collections = require('./controller');
 
 module.exports = function (app) {
 
+	var validateKey = function(req, res, next) {
+		// Validate the api key
+		next();
+	}
+	app.use(validateKey);
+
     app.route('/')
         .get(function(req, res) {
             res.sendStatus(403);
@@ -12,7 +18,7 @@ module.exports = function (app) {
     app.route('/collections')
         .get(Collections.collections);
 
-    app.route('/collections/:collection_id')
+    app.route('/collections/:id')
         .get(Collections.collection);
 
     app.route('/collections/:id/items')
