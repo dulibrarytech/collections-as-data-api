@@ -22,6 +22,7 @@ var createArraysFromLuceneData = function(obj, qdata) {
 }
 
 exports.search = function(req, res) {
+		console.log("TEST qin", req.query.q)
 	let query = req.query.q || ["*"],
 		field = req.query.field || ["all"], 
 		type = req.query.type || ["contains"],
@@ -34,7 +35,7 @@ exports.search = function(req, res) {
 		range = req.query.range || null,
 		advancedSearch = req.query.advancedSearch && req.query.advancedSearch == "true" ? true : false,
 		includeAggData = req.params.aggs && req.params.aggs == "true" ? true : false;
-
+			console.log("TEST q", typeof query)
 	try {
 		if(typeof query == "string") {
 			const qdata = lucene.parse('name:frank OR job:engineer OR title:test');
@@ -44,9 +45,12 @@ exports.search = function(req, res) {
 			res.send("OK")
 		}
 		else {
+				console.log("TEST query is", query)
 			let sortBy = Helper.getSortDataArray(sort),
 			 	queryData = Helper.getSearchQueryDataObject(query, field, type, bool),
 			 	daterange = Helper.getDateRangeObject(range);
+
+			 	console.log("TEST queryData is", queryData)
 
 			Service.searchIndex(queryData, facets, collection, page, pageSize, daterange, sortBy, advancedSearch, function(error, response) {
 				if(error) {

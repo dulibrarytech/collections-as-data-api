@@ -283,7 +283,7 @@ exports.searchIndex = function(queryData, facets=null, collection=null, pageNum=
     }
 
     // DEBUG - Output the full structure of the query object
-    //console.log("TEST query object:", util.inspect(queryObj, {showHidden: false, depth: null}));
+    console.log("TEST query object:", util.inspect(queryObj, {showHidden: false, depth: null}));
 
     // Get elasticsearch aggregations object 
     var facetAggregations = Helper.getFacetAggregationObject(config.facets);
