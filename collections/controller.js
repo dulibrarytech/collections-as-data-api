@@ -4,10 +4,23 @@ const  	config = require('../config/config'),
     	Service = require('./service'),
     	Helper = require('./helper');
 
+var sendResponseObject = function(res, status, response) {
+	res.status(status);
+	res.send({
+		http_status_code: status,
+		data: response
+	});
+}
+
+
 var sendErrorResponse = function(res, error) {
 	console.error(error);
 	res.status(500);
-	res.send(error);
+	res.send({
+		http_status_code: 500,
+		error_message: error,
+		data: {}
+	})
 }
 
 exports.collections = function(req, res) {
@@ -15,7 +28,7 @@ exports.collections = function(req, res) {
 		sendErrorResponse(res, error);
 	})
 	.then(response => {
-		res.send(response);
+		sendResponseObject(res, 200, response);
 	});
 }
 
@@ -26,11 +39,11 @@ exports.collection = function(req, res) {
 			sendErrorResponse(res, error);
 		})
 		.then(response => {
-			res.send(response);
+			sendResponseObject(res, 200, response);
 		});
 	}
 	else {
-		res.sendStatus(400);
+		sendResponseObject(res, 400, {});
 	}
 }
 
