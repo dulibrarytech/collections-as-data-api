@@ -12,7 +12,6 @@ var sendResponseObject = function(res, status, response) {
 	});
 }
 
-
 var sendErrorResponse = function(res, error) {
 	console.error(error);
 	res.status(500);
