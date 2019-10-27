@@ -54,7 +54,7 @@ exports.getCollectionList = function() {
 	});
 }
 
-exports.getCollectionData = function(id) {
+exports.getCollectionData = function(collectionID) {
 	return new Promise(function(fulfill, reject) {
 		var data = {};
 
@@ -64,7 +64,7 @@ exports.getCollectionData = function(id) {
       		body: {
       			query: {
       				bool: {
-      					must:[{"match_phrase": {"pid": id}}],
+      					must:[{"match_phrase": {"pid": collectionID}}],
       					filter: [{"match_phrase": {"object_type": "collection"}}]
       				}
       			}
@@ -87,7 +87,7 @@ exports.getCollectionData = function(id) {
 		      		body: {
 		      			query: {
 		      				bool: {
-		      					filter:[{"match_phrase": {"is_member_of_collection": id}}]
+		      					filter:[{"match_phrase": {"is_member_of_collection": collectionID}}]
 		      				}
 		      			}
 			        }
@@ -108,14 +108,14 @@ exports.getCollectionData = function(id) {
 	});
 }
 
-exports.getCollectionItems = function(id) {
+exports.getCollectionItems = function(collectionID) {
 	return new Promise(function(fulfill, reject) {
 		queryIndex({
       		_source: ["pid", "title"],
       		body: {
       			query: {
       				bool: {
-      					filter: [{"match_phrase": {"is_member_of_collection": id}}]
+      					filter: [{"match_phrase": {"is_member_of_collection": collectionID}}]
       				}
       			}
 	        }
@@ -135,6 +135,47 @@ exports.getCollectionItems = function(id) {
 					})
 				}
 				fulfill(list);
+			}
+		})
+	});
+}
+
+exports.getItemData = function(collectionID, itemID) {
+	return new Promise(function(fulfill, reject) {
+		queryIndex({
+      		body: {
+      			query: {
+      				bool: {
+      					filter: [
+      						{"match_phrase": {"pid": itemID}},
+      						{"match_phrase": {"is_member_of_collection": collectionID}}
+      					]
+      				}
+      			}
+	        }
+		},
+		function(error, response) {
+			if(error) {
+				reject("Elastic error: " + error.message);
+			}
+			else {
+				let item = response.hits.hits[0] || {},
+					data = {};
+
+				for(let key in item) {
+					data["pid"] = item[key].pid;
+					data["title"] = item[key].title || "No title";
+					if(item[key].creator && item[key].creator.length > 0) {
+						data["creator"] = item[key].creator;
+					}  
+					if(item[key].abstract && item[key].abstract.length > 0) {
+						data["description"] = item[key].abstract;
+					} 
+					if(item[key].description && item[key].description.length > 0) {
+						data["description"] = item[key].description;
+					} 
+				}
+				fulfill(data);
 			}
 		})
 	});

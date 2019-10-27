@@ -62,6 +62,17 @@ exports.collectionItems = function(req, res) {
 }
 
 exports.collectionItem = function(req, res) {
-	// Service.getItemData(collectionID, itemID)
-	res.send("collectionItem");
+	if(req.params && req.params.collection_id && req.params.item_id) {
+		let collectionID = req.params.collection_id,
+			itemID = req.params.item_id;
+		Service.getItemData(collectionID, itemID).catch(error => {
+			sendErrorResponse(res, error);
+		})
+		.then(response => {
+			sendResponseObject(res, 200, response);
+		});
+	}
+	else {
+		sendResponseObject(res, 400, {});
+	}
 }
