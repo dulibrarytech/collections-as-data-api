@@ -9,6 +9,37 @@ module.exports = {
     elasticIndex: process.env.ELASTICSEARCH_INDEX,
     indexType: process.env.ELASTICSEARCH_INDEX_TYPE,
 
+    itemMetadataFields: {
+        "Title": {
+            "path": "title"
+        },
+        "Creator": {
+            "path": "names.title"
+        },
+        "Creation Date": {
+            "path": "dates.expression",
+            "matchField": "label",
+            "matchValue": "creation"
+        },
+        "Description": {
+            "path": "notes.content",
+            "matchField": "type",
+            "matchValue": "abstract"
+        }
+    },
+
+    collectionMetadataFields: {
+        "Title": {
+            "path": "title"
+        },
+        "Creator": {
+            "path": "creator"
+        },
+        "Description": {
+            "path": "abstract"
+        }
+    },
+
     /*
      * Fulltext search fields 
      * Define all search fields here
@@ -201,6 +232,4 @@ module.exports = {
      * Set to false if collection objects should be omitted from search results
      */
     showCollectionObjectsInSearchResults: true
-
-
 }

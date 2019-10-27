@@ -2,7 +2,8 @@
 
 const es = require('../config/index'),
       config = require('../config/config'),
-      Helper = require("./helper");
+      Helper = require("./helper"),
+      Metadata = require("../libs/metadata");
 
 var queryIndex = function(data, callback) {
 	data["index"] = config.elasticIndex;
@@ -159,23 +160,34 @@ exports.getItemData = function(collectionID, itemID) {
 				reject("Elastic error: " + error.message);
 			}
 			else {
-				let item = response.hits.hits[0] || {},
-					data = {};
+				var data = {};
+				try {
+					let item = response.hits.hits[0]._source || {};
+					data["pid"] = item.pid;
+					Metadata.getItemMetadataValues(item, data);
 
-				for(let key in item) {
-					data["pid"] = item[key].pid;
-					data["title"] = item[key].title || "No title";
-					if(item[key].creator && item[key].creator.length > 0) {
-						data["creator"] = item[key].creator;
-					}  
-					if(item[key].abstract && item[key].abstract.length > 0) {
-						data["description"] = item[key].abstract;
-					} 
-					if(item[key].description && item[key].description.length > 0) {
-						data["description"] = item[key].description;
-					} 
+					if(!data["Title"]) {
+						data["Title"] = item.title || "No title";
+					}
+					if(!data["Creator"]) {
+						if(typeof item.creator != 'undefined') {
+							data["Creator"] = item.creator;
+						}
+					}
+					if(!data["Description"]) {
+						if(typeof item.abstract != 'undefined') {
+							data["Description"] = item.abstract;
+						}
+						else if(typeof item.description != 'undefined') {
+							data["Description"] = item.description;
+						}
+					}
+
+					fulfill(data);
 				}
-				fulfill(data);
+				catch(e) {
+					reject(e.message);
+				}
 			}
 		})
 	});
