@@ -2,8 +2,7 @@
  
 const  	config = require('../config/config'),
     	Service = require('./service'),
-    	Helper = require('./helper'),
-    	lucene = require('lucene');
+    	Helper = require('./helper');
 
 var sendErrorResponse = function(res, error) {
 	console.error(error);
@@ -15,14 +14,7 @@ var sendErrorResponse = function(res, error) {
 	})
 }
 
-var createArraysFromLuceneData = function(obj, qdata) {
-	for(var key in qdata) {
-		console.log("TEST key", key)
-	}
-}
-
 exports.search = function(req, res) {
-		console.log("TEST qin", req.query.q)
 	let query = req.query.q || ["*"],
 		field = req.query.field || ["all"], 
 		type = req.query.type || ["contains"],
@@ -35,32 +27,30 @@ exports.search = function(req, res) {
 		range = req.query.range || null,
 		advancedSearch = req.query.advancedSearch && req.query.advancedSearch == "true" ? true : false,
 		includeAggData = req.params.aggs && req.params.aggs == "true" ? true : false;
-			console.log("TEST q", typeof query)
+
 	try {
 		if(typeof query == "string") {
-			const qdata = lucene.parse('name:frank OR job:engineer OR title:test');
-			console.log(qdata);
-			createArraysFromLuceneData({terms:[], fields:[], bools:[]}, qdata)
+			let obj = {terms:[], fields:[], types:[], bools:[]};
+			Helper.createArraysFromLuceneData(obj, query);
 
-			res.send("OK")
+			query = obj.terms;
+			field = obj.fields;
+			type = obj.types;
+			bool = obj.bools;
 		}
-		else {
-				console.log("TEST query is", query)
-			let sortBy = Helper.getSortDataArray(sort),
-			 	queryData = Helper.getSearchQueryDataObject(query, field, type, bool),
-			 	daterange = Helper.getDateRangeObject(range);
 
-			 	console.log("TEST queryData is", queryData)
+		let sortBy = Helper.getSortDataArray(sort),
+		 	queryData = Helper.getSearchQueryDataObject(query, field, type, bool),
+		 	daterange = Helper.getDateRangeObject(range);
 
-			Service.searchIndex(queryData, facets, collection, page, pageSize, daterange, sortBy, advancedSearch, function(error, response) {
-				if(error) {
-					sendErrorResponse(res, error.message);
-				}
-				else {
-					res.send(response);
-				}
-			});
-		}
+		Service.searchIndex(queryData, facets, collection, page, pageSize, daterange, sortBy, advancedSearch, function(error, response) {
+			if(error) {
+				sendErrorResponse(res, error.message);
+			}
+			else {
+				res.send(response);
+			}	
+		});
 	}
 	catch(e) {
 		sendErrorResponse(res, e.message);

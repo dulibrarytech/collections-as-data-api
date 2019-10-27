@@ -7,7 +7,8 @@
 
 'use strict';
 
-var config = require('../config/config');
+const config = require('../config/config'),
+      lucene = require('lucene');
 
 /**
  * Creates an Elastic 'aggs' query for an Elastic query object 
@@ -237,4 +238,45 @@ exports.getQueryType = function(queryData) {
 
 exports.getDateRangeObject = function(range) {
 
+}
+
+exports.createArraysFromLuceneData = function(obj, luceneQuery) {
+  // Get the data object from the lucene query string
+  var luceneQueryObj = lucene.parse(luceneQuery);
+
+  // First query bool assignment, this is a placeholder. In advanced search, a query is combined with following query using the following query's boolean term.
+  obj.bools.push("and");
+
+  // Parse the lucene query data object
+  for(var key in luceneQueryObj) {
+    if(key == "left") {
+      for(var subkey in luceneQueryObj[key]) {
+        if(subkey == "left" || subkey == "right" || subkey == "operator") {
+          createArraysFromLuceneData(obj, luceneQueryObj[key]);
+        }
+        else {
+          obj.terms.push(luceneQueryObj[key].term);
+          obj.types.push("contains");
+          obj.fields.push(luceneQueryObj[key].field);
+          break;
+        }
+      }
+    }
+    if(key == "right") {
+      for(var subkey in luceneQueryObj[key]) {
+        if(subkey == "left" || subkey == "right" || subkey == "operator") {
+          createArraysFromLuceneData(obj, luceneQueryObj[key]);
+        }
+        else {
+          obj.terms.push(luceneQueryObj[key].term);
+          obj.types.push("contains");
+          obj.fields.push(luceneQueryObj[key].field);
+          break;
+        }
+      }
+    }
+    if(key == "operator") {
+      obj.bools.push(luceneQueryObj[key].toLowerCase());
+    }
+  }
 }
