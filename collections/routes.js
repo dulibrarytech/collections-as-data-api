@@ -18,10 +18,10 @@ module.exports = function (app) {
     app.route('/collections')
         .get(Collections.collections);
 
-    app.route('/collections/:id')
+    app.route('/collections/:collection_id')
         .get(Collections.collection);
 
-    app.route('/collections/:id/items')
+    app.route('/collections/:collection_id/items')
         .get(Collections.collectionItems);
 
     app.route('/collections/:collection_id/items/:item_id')

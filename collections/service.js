@@ -87,7 +87,7 @@ exports.getCollectionData = function(id) {
 		      		body: {
 		      			query: {
 		      				bool: {
-		      					must:[{"match_phrase": {"is_member_of_collection": id}}]
+		      					filter:[{"match_phrase": {"is_member_of_collection": id}}]
 		      				}
 		      			}
 			        }
@@ -103,6 +103,38 @@ exports.getCollectionData = function(id) {
 						fulfill(data)
 					}
 				})
+			}
+		})
+	});
+}
+
+exports.getCollectionItems = function(id) {
+	return new Promise(function(fulfill, reject) {
+		queryIndex({
+      		_source: ["pid", "title"],
+      		body: {
+      			query: {
+      				bool: {
+      					filter: [{"match_phrase": {"is_member_of_collection": id}}]
+      				}
+      			}
+	        }
+		},
+		function(error, response) {
+			if(error) {
+				reject("Elastic error: " + error.message);
+			}
+			else {
+				let items = response.hits.hits || [],
+					list = [];
+
+				for(let item of items) {
+					list.push({
+						id: item._source.pid || "",
+						title: item._source.title || "No title"
+					})
+				}
+				fulfill(list);
 			}
 		})
 	});

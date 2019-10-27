@@ -32,8 +32,8 @@ exports.collections = function(req, res) {
 }
 
 exports.collection = function(req, res) {
-	if(req.params && req.params.id) {
-		let collectionID = req.params.id;
+	if(req.params && req.params.collection_id) {
+		let collectionID = req.params.collection_id;
 		Service.getCollectionData(collectionID).catch(error => {
 			sendErrorResponse(res, error);
 		})
@@ -47,8 +47,18 @@ exports.collection = function(req, res) {
 }
 
 exports.collectionItems = function(req, res) {
-	// Service.getCollectionItems(collectionID)
-	res.send("collectionItems");
+	if(req.params && req.params.collection_id) {
+		let collectionID = req.params.collection_id;
+		Service.getCollectionItems(collectionID).catch(error => {
+			sendErrorResponse(res, error);
+		})
+		.then(response => {
+			sendResponseObject(res, 200, response);
+		});
+	}
+	else {
+		sendResponseObject(res, 400, {});
+	}
 }
 
 exports.collectionItem = function(req, res) {
