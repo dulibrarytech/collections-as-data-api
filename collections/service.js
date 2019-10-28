@@ -163,7 +163,6 @@ exports.getItemData = function(collectionID, itemID) {
 				var data = {};
 				try {
 					let item = response.hits.hits[0]._source || {};
-					data["pid"] = item.pid;
 					Metadata.getItemMetadataValues(item, data);
 
 					if(!data["Title"]) {
@@ -183,7 +182,7 @@ exports.getItemData = function(collectionID, itemID) {
 						}
 					}
 
-					fulfill(data);
+					fulfill(Helper.addMetadataAttributes(data));
 				}
 				catch(e) {
 					reject(e.message);
