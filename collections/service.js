@@ -80,30 +80,33 @@ exports.getCollectionData = function(collectionID) {
 					let collection = response.hits.hits;
 					data["title"] = collection[0]._source.title || "No title";
 					data["description"] = collection[0]._source.abstract || collection[0]._source.description || "No description";
-				}
 
-				// Count the members of this collection
-				queryIndex({
-		      		_source: [],
-		      		body: {
-		      			query: {
-		      				bool: {
-		      					filter:[{"match_phrase": {"is_member_of_collection": collectionID}}]
-		      				}
-		      			}
-			        }
-				},
-				function(error, response) {
-					if(error) {
-						reject("Elastic error: " + error.message);
-					}
-					else {
-						if(response.hits.hits) {
-							data["item_count"] = response.hits.hits.length;
+					// Count the members of this collection
+					queryIndex({
+			      		_source: [],
+			      		body: {
+			      			query: {
+			      				bool: {
+			      					filter:[{"match_phrase": {"is_member_of_collection": collectionID}}]
+			      				}
+			      			}
+				        }
+					},
+					function(error, response) {
+						if(error) {
+							reject("Elastic error: " + error.message);
 						}
-						fulfill(data)
-					}
-				})
+						else {
+							if(response.hits.hits) {
+								data["item_count"] = response.hits.hits.length;
+							}
+							fulfill(data)
+						}
+					});
+				}
+				else {
+					fulfill(data);
+				}
 			}
 		})
 	});
