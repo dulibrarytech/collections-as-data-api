@@ -165,27 +165,32 @@ exports.getItemData = function(collectionID, itemID) {
 			else {
 				var data = {};
 				try {
-					let item = response.hits.hits[0]._source || {};
-					Metadata.getItemMetadataValues(item, data);
+					if(response.hits.hits && response.hits.hits.length > 0) {
+						let item = response.hits.hits[0]._source || {};
+						Metadata.getItemMetadataValues(item, data);
 
-					if(!data["Title"]) {
-						data["Title"] = item.title || "No title";
-					}
-					if(!data["Creator"]) {
-						if(typeof item.creator != 'undefined') {
-							data["Creator"] = item.creator;
+						if(!data["Title"]) {
+							data["Title"] = item.title || "No title";
 						}
-					}
-					if(!data["Description"]) {
-						if(typeof item.abstract != 'undefined') {
-							data["Description"] = item.abstract;
+						if(!data["Creator"]) {
+							if(typeof item.creator != 'undefined') {
+								data["Creator"] = item.creator;
+							}
 						}
-						else if(typeof item.description != 'undefined') {
-							data["Description"] = item.description;
+						if(!data["Description"]) {
+							if(typeof item.abstract != 'undefined') {
+								data["Description"] = item.abstract;
+							}
+							else if(typeof item.description != 'undefined') {
+								data["Description"] = item.description;
+							}
 						}
-					}
 
-					fulfill(Helper.addMetadataAttributes(data));
+						fulfill(Helper.addMetadataAttributes(data));
+					}
+					else {
+						fulfill(data);
+					}
 				}
 				catch(e) {
 					reject(e.message);
@@ -216,12 +221,17 @@ exports.getItemTranscript = function(collectionID, itemID) {
 			else {
 				var data = {};
 				try {
-					let item = response.hits.hits[0]._source || {},
-						transcript = "No transcript available for this item";
-					if(item.transcript) {
-						transcript = item.transcript;
+					if(response.hits.hits && response.hits.hits.length > 0) {
+						let item = response.hits.hits[0]._source || {},
+							transcript = "No transcript available for this item";
+						if(item.transcript) {
+							transcript = item.transcript;
+						}
+						fulfill(transcript);
 					}
-					fulfill(transcript);
+					else {
+						fulfill(false);
+					}
 				}
 				catch(e) {
 					reject(e.message);

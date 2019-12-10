@@ -70,7 +70,8 @@ exports.collectionItem = function(req, res) {
 			sendErrorResponse(res, error);
 		})
 		.then(response => {
-			sendResponseObject(res, 200, response);
+			let status = Object.keys(response).length === 0 ? 404 : 200;
+			sendResponseObject(res, status, response);
 		});
 	}
 	else {
@@ -86,7 +87,8 @@ exports.collectionItemTranscript = function(req, res) {
 			sendErrorResponse(res, error);
 		})
 		.then(response => {
-			sendResponseObject(res, 200, response);
+			let status = response ? 200 : 404;
+			sendResponseObject(res, status, response);
 		});
 	}
 	else {
