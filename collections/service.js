@@ -191,3 +191,39 @@ exports.getItemData = function(collectionID, itemID) {
 		})
 	});
 }
+
+exports.getItemTranscript = function(collectionID, itemID) {
+	return new Promise(function(fulfill, reject) {
+		queryIndex({
+      		body: {
+      			query: {
+      				bool: {
+      					filter: [
+      						{"match_phrase": {"pid": itemID}},
+      						{"match_phrase": {"is_member_of_collection": collectionID}}
+      					]
+      				}
+      			}
+	        }
+		},
+		function(error, response) {
+			if(error) {
+				reject("Elastic error: " + error.message);
+			}
+			else {
+				var data = {};
+				try {
+					let item = response.hits.hits[0]._source || {},
+						transcript = "No transcript available for this item";
+					if(item.transcript) {
+						transcript = item.transcript;
+					}
+					fulfill(transcript);
+				}
+				catch(e) {
+					reject(e.message);
+				}
+			}
+		})
+	});
+}

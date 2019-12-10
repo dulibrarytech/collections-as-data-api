@@ -76,3 +76,19 @@ exports.collectionItem = function(req, res) {
 		sendResponseObject(res, 400, {});
 	}
 }
+
+exports.collectionItemTranscript = function(req, res) {
+	if(req.params && req.params.collection_id && req.params.item_id) {
+		let collectionID = req.params.collection_id,
+			itemID = req.params.item_id;
+		Service.getItemTranscript(collectionID, itemID).catch(error => {
+			sendErrorResponse(res, error);
+		})
+		.then(response => {
+			sendResponseObject(res, 200, response);
+		});
+	}
+	else {
+		sendResponseObject(res, 400, {});
+	}
+}

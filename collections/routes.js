@@ -26,4 +26,7 @@ module.exports = function (app) {
 
     app.route('/collections/:collection_id/items/:item_id')
         .get(Collections.collectionItem);
+
+    app.route('/collections/:collection_id/items/:item_id/transcript')
+        .get(Collections.collectionItemTranscript);
 };
