@@ -4,10 +4,11 @@ const  	config = require('../config/config'),
     	Service = require('./service'),
     	Helper = require('./helper');
 
-var sendResponseObject = function(res, status, response) {
+var sendResponseObject = function(res, status, response, message="") {
 	res.status(status);
 	res.send({
 		http_status_code: status,
+		message: message,
 		data: response
 	});
 }
@@ -27,7 +28,8 @@ exports.collections = function(req, res) {
 		sendErrorResponse(res, error);
 	})
 	.then(response => {
-		sendResponseObject(res, 200, response);
+		let message = response.length > 0 ? "" : "No collections found";
+		sendResponseObject(res, 200, response, message);
 	});
 }
 
@@ -39,7 +41,8 @@ exports.collection = function(req, res) {
 		})
 		.then(response => {
 			let status = Object.keys(response).length === 0 ? 404 : 200;
-			sendResponseObject(res, status, response);
+			let message = status == 404 ? "Collection not found" : "";
+			sendResponseObject(res, status, response, message);
 		});
 	}
 	else {
@@ -54,7 +57,9 @@ exports.collectionItems = function(req, res) {
 			sendErrorResponse(res, error);
 		})
 		.then(response => {
-			sendResponseObject(res, 200, response);
+			let status = response ? 200 : 404;
+			let message = status == 404 ? "Collection not found" : "";
+			sendResponseObject(res, status, response || [], message);
 		});
 	}
 	else {
@@ -88,7 +93,7 @@ exports.collectionItemTranscript = function(req, res) {
 		})
 		.then(response => {
 			let status = response ? 200 : 404;
-			sendResponseObject(res, status, response);
+			sendResponseObject(res, status, response || "");
 		});
 	}
 	else {

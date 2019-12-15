@@ -3,7 +3,7 @@
 const config = require('../config/config');
 
 exports.getItemMetadataValues = function(item, data = {}) {
-	let displayRecord = item.display_record || {},
+	let displayRecord = item || {},
 		metadataFields = config.itemMetadataFields || {},
 		values = [],
 		pathArray;

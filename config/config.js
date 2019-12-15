@@ -11,18 +11,21 @@ module.exports = {
 
     itemMetadataFields: {
         "Title": {
-            "path": "title"
+            "path": "display_record.title"
         },
         "Creator": {
-            "path": "names.title"
+            "path": "display_record.names.title"
         },
         "Creation Date": {
-            "path": "dates.expression",
+            "path": "display_record.dates.expression",
             "matchField": "label",
             "matchValue": "creation"
         },
+        "Item Type": {
+            "path": "type"
+        },
         "Description": {
-            "path": "notes.content",
+            "path": "display_record.notes.content",
             "matchField": "type",
             "matchValue": "abstract"
         }

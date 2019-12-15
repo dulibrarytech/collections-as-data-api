@@ -40,26 +40,29 @@ exports.getCollectionList = function() {
 				reject("Elastic error: " + error.message);
 			}
 			else {
-				let collections = response.hits.hits || [],
-					list = [];
+				try {
+					let collections = response.hits.hits || [],
+						list = [];
 
-				for(let collection of collections) {
-					list.push({
-						id: collection._source.pid || "",
-						title: collection._source.title || "No title"
-					})
+					for(let collection of collections) {
+						list.push({
+							id: collection._source.pid || "",
+							title: collection._source.title || "No title"
+						})
+					}
+					fulfill(list);
 				}
-				fulfill(list);
+				catch(e) {
+					reject(e.message);
+				}
 			}
-		})
+		});
 	});
 }
 
 exports.getCollectionData = function(collectionID) {
 	return new Promise(function(fulfill, reject) {
 		var data = {};
-
-		// Get the collection data
 		queryIndex({
       		_source: ["title", "description", "abstract"],
       		body: {
@@ -108,14 +111,14 @@ exports.getCollectionData = function(collectionID) {
 					fulfill(data);
 				}
 			}
-		})
+		});
 	});
 }
 
 exports.getCollectionItems = function(collectionID) {
 	return new Promise(function(fulfill, reject) {
 		queryIndex({
-      		_source: ["pid", "title"],
+      		_source: ["pid", "title", "type", "mime_type"],
       		body: {
       			query: {
       				bool: {
@@ -129,18 +132,29 @@ exports.getCollectionItems = function(collectionID) {
 				reject("Elastic error: " + error.message);
 			}
 			else {
-				let items = response.hits.hits || [],
-					list = [];
+				try {
+					let items = response.hits.hits || [],
+						list = [];
 
-				for(let item of items) {
-					list.push({
-						id: item._source.pid || "",
-						title: item._source.title || "No title"
-					})
+					if(response.hits.hits && response.hits.hits.length > 0) {
+						for(let item of items) {
+							list.push({
+								id: item._source.pid || "",
+								mime_type: item._source.mime_type || "",
+								title: item._source.title || "No title"
+							})
+						}
+						fulfill(list);
+					}
+					else {
+						fulfill(false);
+					}
 				}
-				fulfill(list);
+				catch(e) {
+					reject(e.message);
+				}
 			}
-		})
+		});
 	});
 }
 
@@ -167,36 +181,39 @@ exports.getItemData = function(collectionID, itemID) {
 				try {
 					if(response.hits.hits && response.hits.hits.length > 0) {
 						let item = response.hits.hits[0]._source || {};
+
+						// Get configuration fields
 						Metadata.getItemMetadataValues(item, data);
 
-						if(!data["Title"]) {
-							data["Title"] = item.title || "No title";
-						}
-						if(!data["Creator"]) {
-							if(typeof item.creator != 'undefined') {
-								data["Creator"] = item.creator;
-							}
-						}
-						if(!data["Description"]) {
-							if(typeof item.abstract != 'undefined') {
-								data["Description"] = item.abstract;
-							}
-							else if(typeof item.description != 'undefined') {
-								data["Description"] = item.description;
-							}
-						}
+						// Default fields
+						// if(!data["Title"]) {
+						// 	data["Title"] = item.title || "No title";
+						// }
+						// if(!data["Creator"]) {
+						// 	if(typeof item.creator != 'undefined') {
+						// 		data["Creator"] = item.creator;
+						// 	}
+						// }
+						// if(!data["Description"]) {
+						// 	if(typeof item.abstract != 'undefined') {
+						// 		data["Description"] = item.abstract;
+						// 	}
+						// 	else if(typeof item.description != 'undefined') {
+						// 		data["Description"] = item.description;
+						// 	}
+						// }
 
 						fulfill(Helper.addMetadataAttributes(data));
 					}
 					else {
-						fulfill(data);
+						fulfill(false);
 					}
 				}
 				catch(e) {
 					reject(e.message);
 				}
 			}
-		})
+		});
 	});
 }
 
@@ -237,6 +254,6 @@ exports.getItemTranscript = function(collectionID, itemID) {
 					reject(e.message);
 				}
 			}
-		})
+		});
 	});
 }
