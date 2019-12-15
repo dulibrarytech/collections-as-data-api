@@ -8,6 +8,8 @@ const es = require('../config/index'),
 var queryIndex = function(data, callback) {
 	data["index"] = config.elasticIndex;
 	data["type"] = config.indexType;
+	data["from"] = 0;
+	data["size"] = 10000;
 	es.search(data, function(error, response, status) {
 		if(error) {
 			console.error("Elastic error: %s", error.message);
