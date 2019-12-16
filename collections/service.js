@@ -65,18 +65,7 @@ exports.getCollectionList = function() {
 exports.getCollectionData = function(collectionID) {
 	return new Promise(function(fulfill, reject) {
 		var data = {};
-		queryIndex({
-      		_source: ["title", "description", "abstract"],
-      		body: {
-      			query: {
-      				bool: {
-      					must:[{"match_phrase": {"pid": collectionID}}],
-      					filter: [{"match_phrase": {"object_type": "collection"}}]
-      				}
-      			}
-	        }
-		},
-		function(error, response) {
+		fetchCollection(collectionID, function(error, response) {
 			if(error) {
 				reject("Elastic error: " + error.message);
 			}
@@ -86,7 +75,7 @@ exports.getCollectionData = function(collectionID) {
 					data["title"] = collection[0]._source.title || "No title";
 					data["description"] = collection[0]._source.abstract || collection[0]._source.description || "No description";
 
-					// Count the members of this collection
+					// Count the members of the collection
 					queryIndex({
 			      		_source: [],
 			      		body: {
@@ -162,58 +151,44 @@ exports.getCollectionItems = function(collectionID) {
 
 exports.getItemData = function(collectionID, itemID) {
 	return new Promise(function(fulfill, reject) {
-		queryIndex({
-      		body: {
-      			query: {
-      				bool: {
-      					filter: [
-      						{"match_phrase": {"pid": itemID}},
-      						{"match_phrase": {"is_member_of_collection": collectionID}}
-      					]
-      				}
-      			}
-	        }
-		},
-		function(error, response) {
-			if(error) {
-				reject("Elastic error: " + error.message);
-			}
-			else {
-				var data = {};
-				try {
-					if(response.hits.hits && response.hits.hits.length > 0) {
-						let item = response.hits.hits[0]._source || {};
-
-						// Get configuration fields
-						Metadata.getItemMetadataValues(item, data);
-
-						// Default fields
-						// if(!data["Title"]) {
-						// 	data["Title"] = item.title || "No title";
-						// }
-						// if(!data["Creator"]) {
-						// 	if(typeof item.creator != 'undefined') {
-						// 		data["Creator"] = item.creator;
-						// 	}
-						// }
-						// if(!data["Description"]) {
-						// 	if(typeof item.abstract != 'undefined') {
-						// 		data["Description"] = item.abstract;
-						// 	}
-						// 	else if(typeof item.description != 'undefined') {
-						// 		data["Description"] = item.description;
-						// 	}
-						// }
-
-						fulfill(Helper.addMetadataAttributes(data));
+		fetchCollection(collectionID, function(error, response) {
+			if(response.hits.total > 0) {
+				queryIndex({
+		      		body: {
+		      			query: {
+		      				bool: {
+		      					filter: [
+		      						{"match_phrase": {"pid": itemID}},
+		      						{"match_phrase": {"is_member_of_collection": collectionID}}
+		      					]
+		      				}
+		      			}
+			        }
+				},
+				function(error, response) {
+					if(error) {
+						reject("Elastic error: " + error.message);
 					}
 					else {
-						fulfill(false);
+						var data = {};
+						try {
+							if(response.hits.hits && response.hits.hits.length > 0) {
+								let item = response.hits.hits[0]._source || {};
+								Metadata.getItemMetadataValues(item, data);
+								fulfill(Helper.addMetadataAttributes(data));
+							}
+							else {
+								fulfill(null);
+							}
+						}
+						catch(e) {
+							reject(e.message);
+						}
 					}
-				}
-				catch(e) {
-					reject(e.message);
-				}
+				});
+			}
+			else {
+				fulfill(false);
 			}
 		});
 	});
@@ -221,41 +196,70 @@ exports.getItemData = function(collectionID, itemID) {
 
 exports.getItemTranscript = function(collectionID, itemID) {
 	return new Promise(function(fulfill, reject) {
-		queryIndex({
-      		body: {
-      			query: {
-      				bool: {
-      					filter: [
-      						{"match_phrase": {"pid": itemID}},
-      						{"match_phrase": {"is_member_of_collection": collectionID}}
-      					]
-      				}
-      			}
-	        }
-		},
-		function(error, response) {
-			if(error) {
-				reject("Elastic error: " + error.message);
-			}
-			else {
-				var data = {};
-				try {
-					if(response.hits.hits && response.hits.hits.length > 0) {
-						let item = response.hits.hits[0]._source || {},
-							transcript = "No transcript available for this item";
-						if(item.transcript) {
-							transcript = item.transcript;
-						}
-						fulfill(transcript);
+		fetchCollection(collectionID, function(error, response) {
+			if(response.hits.total > 0) {
+				queryIndex({
+		      		body: {
+		      			query: {
+		      				bool: {
+		      					filter: [
+		      						{"match_phrase": {"pid": itemID}},
+		      						{"match_phrase": {"is_member_of_collection": collectionID}}
+		      					]
+		      				}
+		      			}
+			        }
+				},
+				function(error, response) {
+					if(error) {
+						reject("Elastic error: " + error.message);
 					}
 					else {
-						fulfill(false);
+						var data = {};
+						try {
+							if(response.hits.hits && response.hits.hits.length > 0) {
+								let item = response.hits.hits[0]._source || {},
+									transcript = "No transcript available for this item";
+								if(item.transcript) {
+									transcript = item.transcript;
+								}
+								fulfill(transcript);
+							}
+							else {
+								fulfill(null);
+							}
+						}
+						catch(e) {
+							reject(e.message);
+						}
 					}
-				}
-				catch(e) {
-					reject(e.message);
-				}
+				});
+			}
+			else {
+				fulfill(false);
 			}
 		});
+	});
+}
+
+var fetchCollection = function(id, callback) {
+	queryIndex({
+  		_source: ["title", "description", "abstract"],
+  		body: {
+  			query: {
+  				bool: {
+  					must:[{"match_phrase": {"pid": id}}],
+  					filter: [{"match_phrase": {"object_type": "collection"}}]
+  				}
+  			}
+        }
+	},
+	function(error, response) {
+		if(error) {
+			callback(error, null);
+		}
+		else {
+			callback(null, response);
+		}
 	});
 }

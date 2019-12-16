@@ -75,8 +75,20 @@ exports.collectionItem = function(req, res) {
 			sendErrorResponse(res, error);
 		})
 		.then(response => {
-			let status = Object.keys(response).length === 0 ? 404 : 200;
-			sendResponseObject(res, status, response);
+			let status, message = "", data = {};
+			if(response === false) {
+				status = 400;
+				message = "Collection not found";
+			}
+			else if(response === null) {
+				status = 404;
+				message = "Item not found";
+			}
+			else {
+				status = 200;
+				data = response;
+			}
+			sendResponseObject(res, status, data, message);
 		});
 	}
 	else {
@@ -92,8 +104,20 @@ exports.collectionItemTranscript = function(req, res) {
 			sendErrorResponse(res, error);
 		})
 		.then(response => {
-			let status = response ? 200 : 404;
-			sendResponseObject(res, status, response || "");
+			let status, message = "", data = "";
+			if(response === false) {
+				status = 400;
+				message = "Collection not found";
+			}
+			else if(response === null) {
+				status = 404;
+				message = "Item not found";
+			}
+			else {
+				status = 200;
+				data = response;
+			}
+			sendResponseObject(res, status, data, message);
 		});
 	}
 	else {
