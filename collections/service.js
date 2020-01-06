@@ -219,7 +219,7 @@ exports.getItemTranscript = function(collectionID, itemID) {
 						try {
 							if(response.hits.hits && response.hits.hits.length > 0) {
 								let item = response.hits.hits[0]._source || {},
-									transcript = "No transcript available for this item";
+									transcript = "";
 								if(item.transcript) {
 									transcript = item.transcript;
 								}

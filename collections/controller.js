@@ -104,6 +104,7 @@ exports.collectionItemTranscript = function(req, res) {
 			sendErrorResponse(res, error);
 		})
 		.then(response => {
+				console.log("TEST response is", response.length);
 			let status, message = "", data = "";
 			if(response === false) {
 				status = 400;
@@ -112,6 +113,11 @@ exports.collectionItemTranscript = function(req, res) {
 			else if(response === null) {
 				status = 404;
 				message = "Item not found";
+			}
+			//detect empty string, return 404
+			else if(response.length == 0) {
+				status = 404;
+				message = "No transcript available for this item";
 			}
 			else {
 				status = 200;
