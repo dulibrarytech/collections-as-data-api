@@ -8,6 +8,7 @@ module.exports = {
     elasticPort: process.env.ELASTICSEARCH_PORT,
     elasticIndex: process.env.ELASTICSEARCH_INDEX,
     indexType: process.env.ELASTICSEARCH_INDEX_TYPE,
+    repositoryDomain: process.env.REPOSITORY_DOMAIN,
 
     itemMetadataFields: {
         "Title": {
@@ -28,6 +29,9 @@ module.exports = {
             "path": "display_record.notes.content",
             "matchField": "type",
             "matchValue": "abstract"
+        },
+        "Resource URI": {
+            "path": "object"
         }
     },
 

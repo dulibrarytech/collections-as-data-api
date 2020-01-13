@@ -3,7 +3,8 @@
 const es = require('../config/index'),
       config = require('../config/config'),
       Helper = require("./helper"),
-      Metadata = require("../libs/metadata");
+      Metadata = require("../libs/metadata"),
+      Formatter = require("../libs/formatter");
 
 var queryIndex = function(data, callback) {
 	data["index"] = config.elasticIndex;
@@ -176,6 +177,7 @@ exports.getItemData = function(collectionID, itemID) {
 							if(response.hits.hits && response.hits.hits.length > 0) {
 								let item = response.hits.hits[0]._source || {};
 								Metadata.getItemMetadataValues(item, data);
+								Formatter.getRepositoryResourceUrl(data);
 								fulfill(Helper.addMetadataAttributes(data));
 							}
 							else {
