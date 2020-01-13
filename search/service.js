@@ -349,3 +349,26 @@ exports.searchIndex = function(queryData, facets=null, collection=null, pageNum=
       }
     });
 }
+
+exports.luceneSearchIndex = function(queryString, page, pageSize, callback) {
+  let data = {
+      from: page,
+      size: pageSize,
+      index: config.elasticIndex,
+      type: config.indexType,
+      q: queryString
+  }
+
+  // Query the index
+  es.search(data, function (error, response, status) {
+    if(error) {
+      callback(error, {});
+    }
+    else if(status != 200) {
+      callback("Elastic server returned a status of " + status);
+    }
+    else {
+      callback(null, response) 
+    }
+  });
+}

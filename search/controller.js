@@ -30,27 +30,30 @@ exports.search = function(req, res) {
 
 	try {
 		if(typeof query == "string") {
-			let obj = {terms:[], fields:[], types:[], bools:[]};
-			Helper.createArraysFromLuceneData(obj, query);
-
-			query = obj.terms;
-			field = obj.fields;
-			type = obj.types;
-			bool = obj.bools;
+			Service.luceneSearchIndex(query, page, pageSize, function(error, response) {
+				if(error) {
+					sendErrorResponse(res, error.message);
+				}
+				else {
+					res.send(response);
+				}
+			});
 		}
 
-		let sortBy = Helper.getSortDataArray(sort),
-		 	queryData = Helper.getSearchQueryDataObject(query, field, type, bool),
-		 	daterange = Helper.getDateRangeObject(range);
+		else {
+			let sortBy = Helper.getSortDataArray(sort),
+			 	queryData = Helper.getSearchQueryDataObject(query, field, type, bool),
+			 	daterange = Helper.getDateRangeObject(range);
 
-		Service.searchIndex(queryData, facets, collection, page, pageSize, daterange, sortBy, advancedSearch, function(error, response) {
-			if(error) {
-				sendErrorResponse(res, error.message);
-			}
-			else {
-				res.send(response);
-			}	
-		});
+			Service.searchIndex(queryData, facets, collection, page, pageSize, daterange, sortBy, advancedSearch, function(error, response) {
+				if(error) {
+					sendErrorResponse(res, error.message);
+				}
+				else {
+					res.send(response);
+				}	
+			});
+		}
 	}
 	catch(e) {
 		sendErrorResponse(res, e.message);

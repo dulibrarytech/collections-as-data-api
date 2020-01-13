@@ -240,7 +240,7 @@ exports.getDateRangeObject = function(range) {
 
 }
 
-exports.createArraysFromLuceneData = function(obj, luceneQuery) {
+exports.createArraysFromLuceneQuery = function(obj, luceneQuery) {
   // Get the data object from the lucene query string
   var luceneQueryObj = lucene.parse(luceneQuery);
 
@@ -252,7 +252,7 @@ exports.createArraysFromLuceneData = function(obj, luceneQuery) {
     if(key == "left") {
       for(var subkey in luceneQueryObj[key]) {
         if(subkey == "left" || subkey == "right" || subkey == "operator") {
-          createArraysFromLuceneData(obj, luceneQueryObj[key]);
+          createArraysFromLuceneQuery(obj, luceneQueryObj[key]);
         }
         else {
           obj.terms.push(luceneQueryObj[key].term);
@@ -265,7 +265,7 @@ exports.createArraysFromLuceneData = function(obj, luceneQuery) {
     if(key == "right") {
       for(var subkey in luceneQueryObj[key]) {
         if(subkey == "left" || subkey == "right" || subkey == "operator") {
-          createArraysFromLuceneData(obj, luceneQueryObj[key]);
+          createArraysFromLuceneQuery(obj, luceneQueryObj[key]);
         }
         else {
           obj.terms.push(luceneQueryObj[key].term);
