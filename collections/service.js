@@ -35,7 +35,10 @@ exports.getCollectionList = function() {
       				bool: {
       					filter: [{"match_phrase": {"object_type": "collection"}}]
       				}
-      			}
+      			},
+	  			"sort" : [
+			        { "title.keyword" : {"order" : "asc"}}
+			    ]
 	        }
 		},
 		function(error, response) {
@@ -116,7 +119,10 @@ exports.getCollectionItems = function(collectionID) {
       				bool: {
       					filter: [{"match_phrase": {"is_member_of_collection": collectionID}}]
       				}
-      			}
+      			},
+	  			"sort" : [
+			        { "title.keyword" : {"order" : "asc"}}
+			    ]
 	        }
 		},
 		function(error, response) {
