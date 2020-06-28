@@ -9,6 +9,7 @@ module.exports = {
     elasticIndex: process.env.ELASTICSEARCH_INDEX,
     indexType: process.env.ELASTICSEARCH_INDEX_TYPE,
     repositoryDomain: process.env.REPOSITORY_DOMAIN,
+    rootUrl: process.env.PROTOCOL + "://" + process.env.APPLICATION_DOMAIN,
 
     itemMetadataFields: {
         "Title": {
