@@ -1,15 +1,14 @@
 var config = {
 	apiDomain: "http://localhost:3000",
+	defaultEndpoint: "collections",
 
 	apiFormEndpoints: {
         "collections": {
-            "id": "collections",
             "label": "All Collections",
             "uri": "/collections",
             "params": null
         },
         "collection": {
-            "id": "collection",
             "label": "Collection Data",
             "uri": "/collection/{collectionId}",
             "params": [
@@ -23,13 +22,13 @@ var config = {
                 }
             ]
         },
-        "collectionItems": {
+        "collection_items": {
 
         },
         "item": {
 
         },
-        "itemTranscript": {
+        "item_transcript": {
             
         }
     }

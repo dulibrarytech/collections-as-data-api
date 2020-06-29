@@ -12,7 +12,7 @@
 			<div class="api-form-section">
 				<h2>Query API Endpoint</h2>
 				<div class="form-group form-inline">
-					<select id="endpoint-select" class="form-control" onchange="CadApiForm.onSelectEndpointOption(this)"></select>
+					<select id="endpoint-select" class="form-control" onchange="CadApiForm.onSelectEndpointOption(this.value)"></select>
 					<button type="button" class="btn btn-default" onclick="CadApiForm.submitGetRequest()">Get</button>
 				</div>
 			</div>
