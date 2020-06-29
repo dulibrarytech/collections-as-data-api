@@ -11,39 +11,6 @@ module.exports = {
     repositoryDomain: process.env.REPOSITORY_DOMAIN,
     rootUrl: process.env.PROTOCOL + "://" + process.env.APPLICATION_DOMAIN,
 
-    apiFormEndpoints: {
-        "collections": {
-            "id": "collections",
-            "label": "All Collections",
-            "uri": "/collections",
-            "params": null
-        },
-        "collection": {
-            "id": "collections",
-            "label": "All Collections",
-            "uri": "/collections",
-            "params": [
-                {
-                    "paramId": "collection",
-                    "name": "collectionId",
-                    "data": "/collections",
-                    "map": {
-                        "id": "title"
-                    },
-                }
-            ]
-        },
-        "collectionItems": {
-
-        },
-        "item": {
-
-        },
-        "itemTranscript": {
-            
-        }
-    },
-
     itemMetadataFields: {
         "Title": {
             "path": "display_record.title"

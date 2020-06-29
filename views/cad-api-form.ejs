@@ -12,10 +12,7 @@
 			<div class="api-form-section">
 				<h2>Query API Endpoint</h2>
 				<div class="form-group form-inline">
-					<select class="form-control" onchange="CadApiForm.onSelectEndpointOption(this)">
-						<option class="">All Collections</option>
-						<option class="">Collection</option>
-					</select>
+					<select id="endpoint-select" class="form-control" onchange="CadApiForm.onSelectEndpointOption(this)"></select>
 					<button type="button" class="btn btn-default" onclick="CadApiForm.submitGetRequest()">Get</button>
 				</div>
 			</div>
@@ -48,4 +45,8 @@
 	</main>
 </body>
 
-<script src="<%- root_url %>/libs/CadApiForm.js"></script>
+<script type="text/javascript" src="<%- root_url %>/config/config.js"></script>
+<script type="text/javascript" src="<%- root_url %>/libs/CadApiForm.js"></script>
+<script type="text/javascript">
+	CadApiForm.initForm(config);
+</script>

@@ -1,7 +1,7 @@
 'use strict'
 
 var CadApiForm = (function() {
-
+		
 	var initForm;
 	var onSelectEndpointOption;
 	var submitGetRequest;
@@ -10,11 +10,24 @@ var CadApiForm = (function() {
 	var doAjax;
 	var resetDisplays;
 
-	initForm = function(uriId) {
-		// Get uri option label list from config, populate dropdown, using config default uriId. (config is {uriId: friendlyLabel}). option value is friendlyLabel, id is {uriId}_endpoint-option 
-		// Clear query gen
-		// Clear query response
-		// Clear python window
+	var config;
+
+	initForm = function(configObject) {
+		config = configObject;
+		resetDisplays();
+
+		var endpoint,
+			option,
+		    select = document.getElementById("endpoint-select");
+
+		// Add an option to the dropdoen for each endpoint
+		for(var index in config.apiFormEndpoints) {
+			endpoint = config.apiFormEndpoints[index];
+			
+			option = document.createElement("OPTION");
+			option.innerHTML = endpoint.label || "No label";
+			select.appendChild(option);
+		}
 	}
 
 	onSelectEndpointOption = function(option) {
@@ -47,8 +60,8 @@ var CadApiForm = (function() {
 	}
 
 	return {
-		initForm: function(uriId) {
-			return initForm(uriId);
+		initForm: function(configObject) {
+			return initForm(configObject);
 		},
 		onSelectEndpointOption: function(option) {
 			return onSelectEndpointOption(option);
