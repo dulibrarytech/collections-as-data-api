@@ -3,16 +3,24 @@
 var CadApiForm = (function() {
 
 	var initForm;
-	var submitGetRequest;
 	var onSelectEndpointOption;
+	var submitGetRequest;
+
 	var getUri;
 	var doAjax;
+	var resetDisplays;
 
 	initForm = function(uriId) {
 		// Get uri option label list from config, populate dropdown, using config default uriId. (config is {uriId: friendlyLabel}). option value is friendlyLabel, id is {uriId}_endpoint-option 
 		// Clear query gen
 		// Clear query response
 		// Clear python window
+	}
+
+	onSelectEndpointOption = function(option) {
+		let endpoint = option.value;
+		resetDisplays();
+		console.log("onSelectEndpointOption", option.value)
 	}
 
 	submitGetRequest = function() {
@@ -26,17 +34,16 @@ var CadApiForm = (function() {
 		// Pass uri to get function below
 	}
 
-	onSelectEndpointOption = function(option) {
-		let endpoint = option.value;
-		console.log("onSelectEndpointOption", option.value)
-	}
-
 	getUri = function(uri, params) {
 
 	}
 
 	doAjax = function(uri, callback) {
 		// callback();
+	}
+
+	resetDisplays = function() {
+		document.getElementById("query-display").innerHTML = "";
 	}
 
 	return {

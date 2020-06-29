@@ -2,8 +2,8 @@
 <html lang="en">
 
 <head>
-	<link rel="stylesheet" type="text/css" href="<%- root_url %>/assets/css/style.css">
 	<link rel="stylesheet" type="text/css" href="<%- root_url %>/assets/css/bootstrap.min.css">
+	<link rel="stylesheet" type="text/css" href="<%- root_url %>/assets/css/style.css">
 </head>
 
 <body>
@@ -11,28 +11,37 @@
 		<div id="content">
 			<div class="api-form-section">
 				<h2>Query API Endpoint</h2>
-				<form class="api-form">
-					<div class="form-group form-inline">
-						<select class="form-control" onchange="CadApiForm.onSelectEndpointOption(this)">
-							<option class="">All Collections</option>
-							<option class="">Collection</option>
-						</select>
-						<button type="button" class="btn btn-default" onclick="CadApiForm.submitGetRequest()">Go</button>
-					</div>
-				</form>
+				<div class="form-group form-inline">
+					<select class="form-control" onchange="CadApiForm.onSelectEndpointOption(this)">
+						<option class="">All Collections</option>
+						<option class="">Collection</option>
+					</select>
+					<button type="button" class="btn btn-default" onclick="CadApiForm.submitGetRequest()">Get</button>
+				</div>
 			</div>
 			<div class="api-data-section">
 				<div class="query-generator-section">
 					<h2>Query Generator</h2>
+					<div class="form-group form-inline">
+						<textarea type="text" id="query-display" class="form-control"></textarea>
+					</div>
+				</div>
+
 				</div>
 				<div class="download-options">
 
 				</div>
 				<div class="query-response-section">
 					<h2>Query Response</h2>
+					<div class="form-group form-inline">
+						<textarea type="text" id="query-response-display" class="form-control"></textarea>
+					</div>
 				</div>
 				<div class="python-view-section">
 					<h2>Python Code</h2>
+					<div class="form-group form-inline">
+						<textarea type="text" id="python-code-display" class="form-control"></textarea>
+					</div>
 				</div>
 			</div>
 		</div>

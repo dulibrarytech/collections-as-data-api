@@ -1,3 +1,14 @@
 .btn {
 	background-color: rgb(221,221,221) !important;
 }
+
+#query-response-display,
+#python-code-display {
+	min-height: 370px;
+}
+
+@media (min-width: 576px) {
+	.form-inline .form-control {
+	    width: 37%;
+	}
+}
