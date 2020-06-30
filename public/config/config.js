@@ -13,12 +13,15 @@ var config = {
             "uri": "/collection/{collectionId}",
             "params": [
                 {
-                    "paramId": "collection",
+                    "param_id": "collectionId",
                     "name": "collectionId",
+                    "label": "Select Collection",
                     "data": "/collections",
-                    "map": {
-                        "id": "title"
+                    "option_map": {
+                        "value": "id",
+                        "text": "title"
                     },
+                    "depends_on": null
                 }
             ]
         },

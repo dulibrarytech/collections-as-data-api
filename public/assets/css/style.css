@@ -8,7 +8,8 @@
 }
 
 @media (min-width: 576px) {
-	.form-inline .form-control {
+	.form-inline .form-control,
+	.form-control {
 	    width: 37%;
 	}
 }
