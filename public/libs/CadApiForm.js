@@ -89,8 +89,9 @@ var CadApiForm = (function() {
 	}
 
 	submitGetRequest = function() {
-		var endpoint = config.apiFormEndpoints[activeId];
-		let url = config.apiDomain + endpoint.uri;
+		let uri = document.getElementById("query-display").value;
+		let url = config.apiDomain + uri;
+			console.log("TEST getting url", url);
 		ajaxRequest("get", url, function(error, status, response) {
 			if(error) {
 				console.log(error);

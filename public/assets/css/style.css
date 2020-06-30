@@ -5,6 +5,8 @@
 #query-response-display,
 #python-code-display {
 	min-height: 370px;
+	font-family: "monospace","Segoe UI",Roboto,"Helvetica Neue",Arial,"Noto Sans",sans-serif;
+	font-size: 0.85rem;
 }
 
 @media (min-width: 576px) {

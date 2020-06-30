@@ -10,7 +10,7 @@ var config = {
         },
         "collection": {
             "label": "Collection Data",
-            "uri": "/collection/{collectionId}",
+            "uri": "/collections/{collectionId}",
             "params": [
                 {
                     "param_id": "collectionId",
