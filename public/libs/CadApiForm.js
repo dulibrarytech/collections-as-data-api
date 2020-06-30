@@ -10,9 +10,9 @@ var CadApiForm = (function() {
 	var getUri;
 	var ajaxRequest;
 	var resetDisplays;
+	var resetUriParam;
 
 	var config;
-	var activeId;
 
 	initForm = function(configObject) {
 		var endpoint,
@@ -36,8 +36,7 @@ var CadApiForm = (function() {
 
 	onSelectEndpointOption = function(endpointId) {
 		resetDisplays();
-		let endpoint = config.apiFormEndpoints[endpointId]
-		activeId = endpointId;
+		let endpoint = config.apiFormEndpoints[endpointId];
 		document.getElementById("query-display").value = endpoint.uri;
 
 		// Display the first parameter select box
@@ -52,6 +51,7 @@ var CadApiForm = (function() {
 					let select = document.createElement("SELECT");
 					select.setAttribute("id", param.param_id + "_select")
 					select.classList.add("form-control");
+					select.setAttribute("onmousedown", "CadApiForm.resetUriParam(this)");
 					select.setAttribute("onchange", "CadApiForm.onSelectParam(this)");
 					select.setAttribute("placeholder", "sel");
 					formGroup.appendChild(select);
@@ -91,7 +91,6 @@ var CadApiForm = (function() {
 	submitGetRequest = function() {
 		let uri = document.getElementById("query-display").value;
 		let url = config.apiDomain + uri;
-			console.log("TEST getting url", url);
 		ajaxRequest("get", url, function(error, status, response) {
 			if(error) {
 				console.log(error);
@@ -104,11 +103,21 @@ var CadApiForm = (function() {
 		});
 	}
 
+	resetUriParam = function(selectBox) {
+		// Replace the param value in the query uri with the brace delimited param name
+		let paramName = selectBox.id.replace("_select", "");
+		let param = "{" + paramName + "}";
+		if(selectBox.value) {	
+			document.getElementById("query-display").value = document.getElementById("query-display").value.replace(selectBox.value, param);
+		}
+	}
+
 	onSelectParam = function(selectBox) {
+		// Replace the brace delimited param name in the query uri with the selected param value
 		document.getElementById("query-response-display").value = "";
 		let queryString = document.getElementById("query-display").value;
-		queryString = queryString.substring(0, queryString.lastIndexOf("/")+1);
-		queryString = queryString.concat(selectBox.value);
+		let param = "{" + selectBox.id.replace("_select", "") + "}";
+		queryString = queryString.replace(param, selectBox.value);
 		document.getElementById("query-display").value = queryString;
 	}
 
@@ -150,8 +159,11 @@ var CadApiForm = (function() {
 		submitGetRequest: function() {
 			return submitGetRequest();
 		},
-		onSelectParam: function(paramId) {
-			return onSelectParam(paramId);
+		resetUriParam: function(selectBox) {
+			return resetUriParam(selectBox);
+		},
+		onSelectParam: function(selectBox) {
+			return onSelectParam(selectBox);
 		}
 	}
 })()
