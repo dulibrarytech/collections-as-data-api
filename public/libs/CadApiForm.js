@@ -105,6 +105,7 @@ var CadApiForm = (function() {
 	}
 
 	onSelectParam = function(selectBox) {
+		document.getElementById("query-response-display").value = "";
 		let queryString = document.getElementById("query-display").value;
 		queryString = queryString.substring(0, queryString.lastIndexOf("/")+1);
 		queryString = queryString.concat(selectBox.value);
