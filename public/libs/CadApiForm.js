@@ -57,22 +57,29 @@ var CadApiForm = (function() {
 	}
 
 	submitGetRequest = function() {
-		// TODO: if qdisp-val contains "\n\n" delimiter (ad to cfg), explode on delimiter
-		// loop array, ajax then append response to qresponse string (display value string)
+		let uris = document.getElementById("query-display").value.split("\n\n"), 
+			urls = [];
 
-		let uri = document.getElementById("query-display").value,
-		 	url = config.apiDomain + uri;
+		for(var uri of uris) {
+			if(uri.length > 0) {
+				urls.push(config.apiDomain + uri);
+			}
+		}
 
-		ajaxRequest("get", url, function(error, status, response) {
-			if(error) {
-				console.log(error);
-			}
-			else {
-				let responseObject = JSON.parse(response);
-		       	let data = responseObject.data || {};
-		       	document.getElementById("query-response-display").value = JSON.stringify(data, undefined, 4);
-			}
-		});
+		// Loop array urls, fetch
+		for(var url of urls) {
+			ajaxRequest("get", url, function(error, status, response) {
+				if(error) {
+					console.log(error);
+				}
+				else {
+					let responseObject = JSON.parse(response),
+			       		data = responseObject.data || {};
+			       	// TODO remove the end of the json string, append, re-add the end ?
+			       	document.getElementById("query-response-display").value += (JSON.stringify(data, undefined, 4) + "\n\n");
+				}
+			});
+		}
 	}
 
 	resetUriParam = function(paramName) {
