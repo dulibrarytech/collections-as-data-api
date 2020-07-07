@@ -2,6 +2,17 @@
 	background-color: rgb(221,221,221) !important;
 }
 
+.list-container {
+	height: unset;
+	max-height: 300px;
+    width: 90%;
+	overflow-y: scroll;
+}
+
+.list-container ul {
+	list-style-type: none;
+}
+
 #query-response-display,
 #python-code-display {
 	min-height: 370px;
@@ -12,6 +23,10 @@
 @media (min-width: 576px) {
 	.form-inline .form-control,
 	.form-control {
-	    width: 37%;
+	    width: 90%;
+	}
+
+	#content {
+		width: 37%;
 	}
 }
