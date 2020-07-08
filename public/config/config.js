@@ -22,7 +22,8 @@ var config = {
                         "text": "title"
                     },
                     "depends_on": null,
-                    "multi_select": false
+                    "multi_select": false,
+                    "required_field": "title"
                 }
             ]
         },
@@ -40,7 +41,8 @@ var config = {
                         "text": "title"
                     },
                     "depends_on": null,
-                    "multi_select": false
+                    "multi_select": false,
+                    "required_field": "title"
                 }
             ]
         },
@@ -58,7 +60,8 @@ var config = {
                         "text": "title"
                     },
                     "depends_on": null,
-                    "multi_select": false
+                    "multi_select": false,
+                    "required_field": "title"
                 },
                 {
                     "param_id": "itemId",
@@ -70,7 +73,8 @@ var config = {
                         "text": "title"
                     },
                     "depends_on": "collectionId",
-                    "multi_select": true
+                    "multi_select": true,
+                    "required_field": "title"
                 }
             ]
         },
@@ -88,7 +92,8 @@ var config = {
                         "text": "title"
                     },
                     "depends_on": null,
-                    "multi_select": false
+                    "multi_select": false,
+                    "required_field": "title"
                 },
                 {
                     "param_id": "itemId",
@@ -100,7 +105,8 @@ var config = {
                         "text": "title"
                     },
                     "depends_on": "collectionId",
-                    "multi_select": true
+                    "multi_select": true,
+                    "required_field": "transcript"
                 }
             ]
         }

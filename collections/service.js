@@ -113,7 +113,7 @@ exports.getCollectionData = function(collectionID) {
 exports.getCollectionItems = function(collectionID) {
 	return new Promise(function(fulfill, reject) {
 		queryIndex({
-      		_source: ["pid", "title", "type", "mime_type", "object_type"],
+      		_source: ["pid", "title", "type", "mime_type", "object_type", "transcript"],
       		body: {
       			query: {
       				bool: {
@@ -140,7 +140,8 @@ exports.getCollectionItems = function(collectionID) {
 								id: item._source.pid || "",
 								object_type: item._source.object_type || "undefined",
 								mime_type: item._source.mime_type || "",
-								title: item._source.title || "No title"
+								title: item._source.title || "No title",
+								transcript: item._source.transcript ? true : false
 							})
 						}
 						fulfill(list);

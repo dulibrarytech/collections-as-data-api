@@ -66,7 +66,8 @@ var CadApiForm = (function() {
 			}
 		}
 
-		// Loop array urls, fetch
+		// Loop urls, fetch
+		let endchar = "", paramData;
 		for(var url of urls) {
 			ajaxRequest("get", url, function(error, status, response) {
 				if(error) {
@@ -75,8 +76,23 @@ var CadApiForm = (function() {
 				else {
 					let responseObject = JSON.parse(response),
 			       		data = responseObject.data || {};
-			       	// TODO remove the end of the json string, append, re-add the end ?
-			       	document.getElementById("query-response-display").value += (JSON.stringify(data, undefined, 4) + "\n\n");
+
+			       	// Insert multiple response objects into a JSON array structure in the output display
+			       	let displayData = document.getElementById("query-response-display").value;
+			       	if(cache[cache.currentParam] && typeof cache[cache.currentParam] == "object") {
+			       		// This is a multi request output. Display output data in a JSON array. Prepend a '[' to the first data output, append a ',' to delimit the response objects, append a ']' to the last response received
+				       	if(displayData.length == 0) {
+				       		document.getElementById("query-response-display").value = "[";
+				       	}
+				       	// If the number of delimiters is equal to the number of params currently selected, this is the last response object to be added to the display.
+				       	if(displayData.indexOf(",\n\n") >= 0 && displayData.match(/\n\n/g).length == cache[cache.currentParam].length-1) {
+				       		endchar = "]";
+				       	}	
+				       	else {
+				       		endchar = ",\n\n";
+				       	}
+			       	}
+			       	document.getElementById("query-response-display").value += (JSON.stringify(data, undefined, 4)) + endchar;
 				}
 			});
 		}
@@ -95,6 +111,7 @@ var CadApiForm = (function() {
 		clearDependentParams(selectBox);
 		document.getElementById("query-response-display").value = "";
 		cache[paramName] = selectBox.value;
+		cache.currentParam = paramName;
 		refreshQueryDisplay();
 
 		// Check for a dependent param
@@ -112,6 +129,7 @@ var CadApiForm = (function() {
 			uri = config.apiFormEndpoints[endpointId].uri,
 			paramName = checkBox.name;
 
+		cache.currentParam = paramName;
 		uri = uri.replace("{" + paramName + "}", checkBox.value) + "\n\n";
 		uri = getUrlParamValues(uri);
 
@@ -166,18 +184,22 @@ var CadApiForm = (function() {
 
 						// Add the response items
 						for(var index in responseObject.data) {
-							item = responseObject.data[index];
-							listItem = document.createElement("LI");
-							checkbox = document.createElement("INPUT");
-							checkbox.setAttribute("type", "checkbox");
-							checkbox.setAttribute("onclick", "CadApiForm.onCheckParam(this)");
-							checkbox.setAttribute("name", param.name);
-							checkbox.setAttribute("value", item[map.value]);
-							label = document.createElement("LABEL");
-							label.innerHTML = item[map.text];
-							listItem.appendChild(checkbox);
-							listItem.appendChild(label);
-							list.appendChild(listItem);
+							if(!param.required_field ||
+							   (param.required_field && responseObject.data[index][param.required_field])) {
+
+								item = responseObject.data[index];
+								listItem = document.createElement("LI");
+								checkbox = document.createElement("INPUT");
+								checkbox.setAttribute("type", "checkbox");
+								checkbox.setAttribute("onclick", "CadApiForm.onCheckParam(this)");
+								checkbox.setAttribute("name", param.name);
+								checkbox.setAttribute("value", item[map.value]);
+								label = document.createElement("LABEL");
+								label.innerHTML = item[map.text];
+								listItem.appendChild(checkbox);
+								listItem.appendChild(label);
+								list.appendChild(listItem);
+							} 
 						}
 
 						container.appendChild(list);
