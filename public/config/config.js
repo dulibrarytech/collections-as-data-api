@@ -30,6 +30,9 @@ var config = {
         "collection_items": {
         	"label": "Collection Items",
         	"uri": "/collections/{collectionId}/items",
+            "templates": {
+                "python": "collectionItems"
+            },
         	"params": [
                 {
                     "param_id": "collectionId",

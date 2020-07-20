@@ -15,6 +15,8 @@ var CadApiForm = (function() {
 	var clearDependentParams;
 	var addParameterSelectBox;
 	var getUrlParamValues;
+	var displayTemplate;
+	var renderTemplate;
 
 	var config;
 	var cache;
@@ -37,6 +39,21 @@ var CadApiForm = (function() {
 			select.appendChild(option);
 		}
 		onSelectEndpointOption(config.defaultEndpoint);
+	}
+
+	displayTemplate = function(endpointId) {
+		let templates = config.apiFormEndpoints[endpointId].templates || {}, url;
+		for(var key in templates) {
+			url = config.apiDomain + "/template/" + templates[key];
+			ajaxRequest("get", url, function(error, status, response) {
+				if(error) {
+					console.log(error);
+				}
+				else {
+					document.getElementById(key + "-display").innerHTML = renderTemplate(response, cache);
+				}
+			});
+		} 
 	}
 
 	onSelectEndpointOption = function(endpointId) {
@@ -98,6 +115,22 @@ var CadApiForm = (function() {
 		}
 	}
 
+	renderTemplate = function(template, values) {
+		let name, 
+			value = "Unset",
+			params = template.match(/{(.*?)\}/g) || [];
+
+		for(var param of params) {
+			name = param.replace("{", "").replace("}", "");
+			if(cache[name]) {
+				value = JSON.stringify(cache[name]);
+			}
+			template = template.replace(param, value);
+		}
+
+		return template;
+	}
+
 	resetUriParam = function(paramName) {
 		let endpointId = document.getElementById("endpoint-select").value;
 		if(cache[paramName]) {
@@ -122,6 +155,8 @@ var CadApiForm = (function() {
 				addParameterSelectBox(param);
 			}
 		}
+
+		displayTemplate(endpointId);
 	}
 
 	onCheckParam = function(checkBox) {
