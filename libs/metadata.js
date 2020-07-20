@@ -28,7 +28,6 @@ var extractValues = function(pathArray, object, matchField, matchValue, conditio
 		nextObject,
 		nextArray;
 
-	// We have drilled into the specified field.  Locate the value
 	if(pathArray.length == 1) {
 		if(matchField) {
 			if(object[pathArray] && 

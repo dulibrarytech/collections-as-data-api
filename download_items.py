@@ -44,6 +44,8 @@ for collection in collections:
         item_id = collection_items["data"][i]["id"]
         item_uri = "/cad/collections/" + collection_id + "/items/" + item_id
         item_data = request_api_data(item_uri)
+
+        # Fetch and write the metadata text file
         filename = item_id + "_metadata.txt"
         item_metadata_file = open(filename, "w")
 
@@ -53,7 +55,9 @@ for collection in collections:
 
         item_metadata_file.close()
         zipObj.write(filename)
+        ###
 
+        # Fetch and write the transcript text file
         item_transcript_uri = "/cad/collections/" + collection_id + "/items/" + item_id + "/transcript"
         item_transcript_data = request_api_data(item_transcript_uri)
         if len(item_transcript_data["data"]) > 0:
@@ -62,7 +66,9 @@ for collection in collections:
             item_transcript_file.write(item_transcript_data["data"])
             item_transcript_file.close()
             zipObj.write(filename)
+        ###
 
+        #Fetch and write the object file
         item_resource_uri = "http://libspecc01-vlp.du.edu/discovery/datastream/" + item_id + "/object"
         extension = item_data["data"]["Resource URI"]["value"][0][-3:]
         filename = item_id + "_resource" + "." + extension
@@ -70,4 +76,5 @@ for collection in collections:
 
         stream_to_file(item_resource_uri, filename)
         zipObj.write(filename)
+        ###
 
