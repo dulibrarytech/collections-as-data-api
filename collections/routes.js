@@ -1,20 +1,26 @@
 'use strict'
 
-var Collections = require('./controller');
+var config = require("../config/config.js"),
+    Collections = require('./controller');
 
-module.exports = function (app) {
+module.exports = function(app) {
 
 	var validateKey = function(req, res, next) {
-		// Validate the api key
-		next();
+        if(req.query.key && req.query.key == config.apiKey) {
+            next();
+        }
+		else {
+             res.status(403).send('API key is required')
+        }
 	}
-	app.use(validateKey);
 
     app.route('/')
         .get(function(req, res) {
             res.sendStatus(403);
     });
 
+    app.use(validateKey);
+    
     app.route('/collections')
         .get(Collections.collections);
 
