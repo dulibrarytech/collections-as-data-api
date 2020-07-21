@@ -3,6 +3,7 @@
 var CadApiForm = (function() {
 		
 	var initForm;
+	var onCheckTerms;
 	var onSelectEndpointOption;
 	var submitGetRequest;
 	var onSelectParam;
@@ -39,6 +40,20 @@ var CadApiForm = (function() {
 			select.appendChild(option);
 		}
 		onSelectEndpointOption(config.defaultEndpoint);
+	}
+
+	onCheckTerms = function(checkbox) {
+			console.log("TEST checkterms", checkbox.checked ? "Y" : "N")
+		if(checkbox.checked) {
+			document.getElementById("endpoint-select").classList.remove("disabled");
+			document.getElementById("get-submit").classList.remove("disabled");
+			document.getElementById("query-display").classList.remove("disabled");
+		}
+		else {
+			document.getElementById("endpoint-select").classList.add("disabled");
+			document.getElementById("get-submit").classList.add("disabled");
+			document.getElementById("query-display").classList.add("disabled");
+		}
 	}
 
 	displayTemplate = function(endpointId) {
@@ -325,19 +340,22 @@ var CadApiForm = (function() {
 
 	return {
 		initForm: function(configObject) {
-			return initForm(configObject);
+			initForm(configObject);
+		},
+		onCheckTerms: function(checkBox) {
+			onCheckTerms(checkBox);
 		},
 		onSelectEndpointOption: function(endpointId) {
-			return onSelectEndpointOption(endpointId);
+			onSelectEndpointOption(endpointId);
 		},
 		submitGetRequest: function() {
-			return submitGetRequest();
+			submitGetRequest();
 		},
 		resetUriParam: function(paramName) {
-			return resetUriParam(paramName);
+			resetUriParam(paramName);
 		},
 		onSelectParam: function(selectBox) {
-			return onSelectParam(selectBox);
+			onSelectParam(selectBox);
 		},
 		onCheckParam: function(checkBox) {
 			onCheckParam(checkBox);
