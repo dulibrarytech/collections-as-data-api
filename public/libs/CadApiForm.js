@@ -53,6 +53,7 @@ var CadApiForm = (function() {
 			document.getElementById("endpoint-select").classList.add("disabled");
 			document.getElementById("get-submit").classList.add("disabled");
 			document.getElementById("query-display").classList.add("disabled");
+			resetDisplays();
 		}
 	}
 

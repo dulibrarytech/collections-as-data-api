@@ -6,7 +6,8 @@ var config = require("../config/config.js"),
 module.exports = function(app) {
 
 	var validateKey = function(req, res, next) {
-        if(req.query.key && req.query.key == config.apiKey) {
+        if(req.query.key && req.query.key == config.apiKey ||
+            config.nodeEnv == "development") {
             next();
         }
 		else {
