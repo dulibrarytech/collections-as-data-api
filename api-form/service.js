@@ -2,10 +2,13 @@
 
 const es = require('../config/index'),
       config = require('../config/config'),
-      pythonTemplates = require("./templates/python.js");
+      templates = require("./templates/download.js");
+
+exports.validateKey = function(key) {
+	return key == config.apiKey ? true : false;
+}
 
 exports.fetchTemplate = function(templateName) {
-	let template = pythonTemplates[templateName] || "Template " + templateName + " not found";
-		console.log("TEST template", template)
+	let template = templates[templateName] || "Template " + templateName + " not found";
 	return template;
 }

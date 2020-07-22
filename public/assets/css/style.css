@@ -28,13 +28,20 @@
 	font-size: 0.85rem;
 }
 
+#api-key-feedback:after {
+	font-family: FontAwesome;
+    content: "\f00c";
+    font-size: 23px;
+    color: green;
+    pointer-events: none;
+    font-weight: bold;
+    position: relative;
+    right: 111px;
+}
+
 @media (min-width: 576px) {
 	.form-inline .form-control,
 	.form-control {
 	    width: 85%;
-	}
-
-	#content {
-		width: 37%;
 	}
 }

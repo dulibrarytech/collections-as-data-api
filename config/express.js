@@ -7,6 +7,7 @@
 'use strict';
 
 var express = require('express'),
+    compression = require('compression'),
     config = require('./config.js');
 
 module.exports = function () {
@@ -20,8 +21,8 @@ module.exports = function () {
     app.set('views', './views');
     app.set('view engine', 'ejs');
 
-    require('../collections/routes.js')(app);
     require('../api-form/routes.js')(app);
+    require('../collections/routes.js')(app);
     //require('../collections/routes/api_v1.js')(app);
     require('../search/routes.js')(app);
 
