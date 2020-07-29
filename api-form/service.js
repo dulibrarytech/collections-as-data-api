@@ -21,12 +21,11 @@ exports.sendApiKeyEmail = function(address, key, callback) {
 	});
 
 	var message = "Api key: " + key;
-
 	var mailOptions = {
-		from: 'test@example.com',
+		from: 'donotreply@example.com',
 		to: address,
-		subject: 'Sending Email using Node.js',
-		text: 'That was easy!'
+		subject: 'Collections as Data API key request',
+		text: message
 	};
 
 	transporter.sendMail(mailOptions, function(error, info){

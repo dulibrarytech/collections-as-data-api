@@ -141,14 +141,16 @@ var CadApiForm = (function() {
 			url = config.apiDomain + "/form/requestKey?email=" + address;
 			
 		ajaxRequest("post", url, function(error, status, response) {
+			document.getElementById("email").value = "";
+			document.getElementById("email").placeholder = "Request for API key sent.";
 			if(error) {
-				console.log(error);
+				console.log("Error sending API key request:", error);
 			}
 			else if(response) {
-				console.log("Request for API key sent");
+				console.log("Request for API key sent successfully");
 			}
 			else {
-				console.log("Error sending API key notification")
+				console.log("Error sending API key notification email")
 			}
 		});
 	}
