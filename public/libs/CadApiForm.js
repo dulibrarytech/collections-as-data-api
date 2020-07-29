@@ -13,6 +13,7 @@ var CadApiForm = (function() {
 
 	var ajaxRequest;
 	var resetDisplays;
+	var resetForm;
 	var refreshQueryDisplay;
 	var resetUriParam;
 	var clearDependentParams;
@@ -55,7 +56,7 @@ var CadApiForm = (function() {
 			document.getElementById("endpoint-select").classList.add("disabled");
 			document.getElementById("get-submit").classList.add("disabled");
 			document.getElementById("query-display").classList.add("disabled");
-			resetDisplays();
+			resetForm();
 		}
 	}
 
@@ -78,6 +79,7 @@ var CadApiForm = (function() {
 		cache = {};
 		resetDisplays();
 		let endpoint = config.apiFormEndpoints[endpointId];
+		document.getElementById("endpoint-select").value = endpoint.id;
 		document.getElementById("query-display").value = endpoint.uri;
 
 		// Display the first parameter select box
@@ -135,7 +137,20 @@ var CadApiForm = (function() {
 	}
 
 	submitEmailAddress = function() {
-
+		let address = document.getElementById("email").value.substring(0, config.maxEmailChars),
+			url = config.apiDomain + "/form/requestKey?email=" + address;
+			
+		ajaxRequest("post", url, function(error, status, response) {
+			if(error) {
+				console.log(error);
+			}
+			else if(response) {
+				console.log("Request for API key sent");
+			}
+			else {
+				console.log("Error sending API key notification")
+			}
+		});
 	}
 
 	setApiKey = function() {
@@ -152,7 +167,7 @@ var CadApiForm = (function() {
 					console.log("Key is valid");
 					apiKey = key;
 					document.getElementById("terms-ack").style.display = "flex";
-					onSelectEndpointOption(config.defaultEndpoint);
+					resetForm();
 					//document.getElementById("api-key-feedback").display = "block";
 				}
 				else {
@@ -353,12 +368,25 @@ var CadApiForm = (function() {
 		       callback(null, 200, xhttp.responseText);
 		    }
 		    else {
-		    	let message = "Server responded with status " + this.status + ", ready state " + this.readyState;
+		    	let message = "Url: " + url + " Server responded with status " + this.status + ", ready state " + this.readyState;
 		    	callback(message, this.status, null)
 		    }
 		};
-		xhttp.open(type, url, false);
-		xhttp.send();
+
+		if(type.toLowerCase() == "post") {
+			let param = url.substring(url.indexOf("?")+1).split("="),
+				data = {};
+
+			data[param[0]] = param[1];
+			url = url.substring(0, url.indexOf("?"));
+			xhttp.open("POST", url, true);
+			xhttp.setRequestHeader("Content-type", "application/json");
+			xhttp.send(JSON.stringify(data));
+		}
+		else {
+			xhttp.open("GET", url, false);
+			xhttp.send();
+		}
 	}
 
 	resetDisplays = function() {
@@ -366,6 +394,11 @@ var CadApiForm = (function() {
 		document.getElementById("query-response-display").value = "";
 		document.getElementById("param-options").innerHTML = "";
 		document.getElementById("python-display").innerHTML = "";
+	}
+
+	resetForm = function() {
+		resetDisplays();
+		onSelectEndpointOption(config.defaultEndpoint);
 	}
 
 	refreshQueryDisplay = function() {

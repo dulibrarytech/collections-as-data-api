@@ -11,6 +11,8 @@ module.exports = {
     repositoryDomain: process.env.REPOSITORY_DOMAIN,
     rootUrl: process.env.PROTOCOL + "://" + process.env.APPLICATION_DOMAIN,
     discoveryApiDomain: process.env.DISCOVERY_APPLICATION_DOMAIN,
+    mailServer: process.env.MAIL_SERVER,
+    mailServerPort: process.env.MAIL_SERVER_PORT,
 
     itemMetadataFields: {
         "Title": {

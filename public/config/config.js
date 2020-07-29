@@ -1,6 +1,7 @@
 var config = {
 	apiDomain: "http://localhost:3000",
 	defaultEndpoint: "collections",
+    maxEmailChars: "50",
 
 	apiFormEndpoints: {
         "collections": {

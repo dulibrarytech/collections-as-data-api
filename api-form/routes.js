@@ -20,6 +20,9 @@ module.exports = function(app) {
     app.route('/form/validateKey')
         .get(ApiForm.validateKey)
 
+    app.route('/form/requestKey')
+        .post(ApiForm.sendApiKeyEmail)
+
     app.use(validateKey);
 
     app.route('/template/:name')

@@ -8,6 +8,20 @@ exports.validateKey = function(req, res) {
 	res.send({isValid:isValid})
 }
 
+exports.sendApiKeyEmail = function(req, res) {
+	let email = req.body.email || "",
+		response = false;
+	Service.sendApiKeyEmail(email, Service.getKey(), function(error, response) {
+		if(error) { 
+			console.log("Error: ", error) 
+		}
+		else {
+			response = true;
+		}
+		res.send(response);
+	});
+}
+
 exports.renderForm = function(req, res) {
 	let data = {
 		"root_url": config.rootUrl
