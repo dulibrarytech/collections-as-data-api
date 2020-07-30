@@ -36,3 +36,10 @@ exports.getTemplate = function(req, res) {
 	template = Service.fetchTemplate(name);
 	res.send(template);
 }
+
+exports.renderTermsOfUse = function(req, res) {
+	let data = {
+		"root_url": config.rootUrl
+	};
+	res.render('terms-of-use', data);
+}

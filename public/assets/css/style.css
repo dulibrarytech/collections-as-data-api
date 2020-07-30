@@ -39,6 +39,22 @@
     right: 111px;
 }
 
+.scrollbox {
+	overflow-y: scroll;
+    padding: 10px;
+    border: solid;
+    border-width: 1px;
+    border-color: #e5e3e1;
+}
+
+.terms-of-use-section {
+	width: 35%;
+}
+
+.terms-of-use {
+	max-height: 600px;
+}
+
 @media (min-width: 576px) {
 	.form-inline .form-control,
 	.form-control {

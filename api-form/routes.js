@@ -17,6 +17,9 @@ module.exports = function(app) {
     app.route('/form')
         .get(ApiForm.renderForm)
 
+    app.route('/form/termsOfUse')
+        .get(ApiForm.renderTermsOfUse)
+
     app.route('/form/validateKey')
         .get(ApiForm.validateKey)
 
