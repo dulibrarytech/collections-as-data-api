@@ -28,7 +28,7 @@ exports.collections = function(req, res) {
 		sendErrorResponse(res, error);
 	})
 	.then(response => {
-		let message = response.length > 0 ? "" : "No collections found";
+		let message = response && response.length > 0 ? "" : "No collections found";
 		sendResponseObject(res, 200, response, message);
 	});
 }

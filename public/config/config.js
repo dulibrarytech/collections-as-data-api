@@ -53,6 +53,9 @@ var config = {
         "item": {
         	"label": "Item",
         	"uri": "/collections/{collectionId}/items/{itemId}",
+            "templates": {
+                "python": "collectionItem"
+            },
         	"params": [
                 {
                     "param_id": "collectionId",
@@ -85,6 +88,9 @@ var config = {
         "item_transcript": {
             "label": "Item Transcript",
         	"uri": "/collections/{collectionId}/items/{itemId}/transcript",
+            "templates": {
+                "python": "itemTranscript"
+            },
         	"params": [
                 {
                     "param_id": "collectionId",

@@ -63,6 +63,7 @@ var CadApiForm = (function() {
 	displayTemplate = function(endpointId) {
 		let templates = config.apiFormEndpoints[endpointId].templates || {}, url;
 		for(var key in templates) {
+			document.getElementById(key + "-display").innerHTML = "";
 			url = config.apiDomain + "/template/" + templates[key] + "?key=" + apiKey;
 			ajaxRequest("get", url, function(error, status, response) {
 				if(error) {
@@ -79,7 +80,7 @@ var CadApiForm = (function() {
 		cache = {};
 		resetDisplays();
 		let endpoint = config.apiFormEndpoints[endpointId];
-		document.getElementById("endpoint-select").value = endpoint.id;
+		document.getElementById("endpoint-select").value = endpointId;
 		document.getElementById("query-display").value = endpoint.uri;
 
 		// Display the first parameter select box
@@ -141,8 +142,14 @@ var CadApiForm = (function() {
 			url = config.apiDomain + "/form/requestKey?email=" + address;
 			
 		ajaxRequest("post", url, function(error, status, response) {
-			document.getElementById("email").value = "";
-			document.getElementById("email").placeholder = "Request for API key sent.";
+			document.getElementById("email").style.color = "green";
+			document.getElementById("email").value = "Request for API key sent.";
+			setTimeout(function() { 
+				document.getElementById("email").style.color = "inherit";
+				document.getElementById("email").value = "";
+				document.getElementById("email").placeholder = "Enter email to receive API key"; 
+			}, 3000);
+
 			if(error) {
 				console.log("Error sending API key request:", error);
 			}
@@ -191,8 +198,11 @@ var CadApiForm = (function() {
 			name = param.replace("{", "").replace("}", "");
 			if(cache[name]) {
 				value = JSON.stringify(cache[name]);
+				template = template.replace(param, value);
 			}
-			template = template.replace(param, value);
+			else {
+				template = template.replace(param, "");
+			}
 		}
 
 		return template;
@@ -216,14 +226,17 @@ var CadApiForm = (function() {
 
 		// Check for a dependent param
 		let endpointId = document.getElementById("endpoint-select").value, param;
-		for(var index in config.apiFormEndpoints[endpointId].params) {
-			param = config.apiFormEndpoints[endpointId].params[index];
-			if(param.depends_on == paramName) {
-				addParameterSelectBox(param);
+		if(config.apiFormEndpoints[endpointId].params) {
+			for(var index in config.apiFormEndpoints[endpointId].params) {
+				param = config.apiFormEndpoints[endpointId].params[index];
+				if(param.depends_on == paramName) {
+					addParameterSelectBox(param);
+				}
 			}
 		}
-
-		displayTemplate(endpointId);
+		else {
+			displayTemplate(endpointId);
+		}
 	}
 
 	onCheckParam = function(checkBox) {
@@ -259,6 +272,7 @@ var CadApiForm = (function() {
 				refreshQueryDisplay();
 			}
 		}	
+		displayTemplate(endpointId);
 	}
 
 	addParameterSelectBox = function(param) {
@@ -395,7 +409,10 @@ var CadApiForm = (function() {
 		document.getElementById("query-display").value = "";
 		document.getElementById("query-response-display").value = "";
 		document.getElementById("param-options").innerHTML = "";
-		document.getElementById("python-display").innerHTML = "";
+		var codeDisplays = document.getElementsByClassName("code-display");
+		for(var i=0; i<codeDisplays.length; i++) {
+			codeDisplays[i].innerHTML = "";
+		}
 	}
 
 	resetForm = function() {
