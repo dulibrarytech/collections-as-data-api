@@ -177,13 +177,13 @@ var CadApiForm = (function() {
 					apiKey = key;
 					document.getElementById("terms-ack").style.display = "flex";
 					resetForm();
-					//document.getElementById("api-key-feedback").display = "block";
+					document.getElementById("api-key-feedback").style.display = "block";
 				}
 				else {
 					console.log("Invalid key");
 					document.getElementById("api-key").style.color = "red";
 					document.getElementById("api-key").value = "Invalid key";
-					//document.getElementById("api-key-feedback").display = "block";
+					document.getElementById("api-key-feedback").style.display = "none";
 				}
 			}
 		});

@@ -49,7 +49,7 @@
 #api-key-feedback:after {
 	font-family: FontAwesome;
     content: "\f00c";
-    font-size: 23px;
+    font-size: 20px;
     color: green;
     pointer-events: none;
     font-weight: bold;
