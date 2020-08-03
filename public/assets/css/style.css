@@ -3,12 +3,29 @@
     opacity: 0.8;
 }
 
+#form {
+	padding: 20px 30px;
+    width: 50%;
+}
+
 .form-control:disabled, .form-control[readonly] {
     background-color: inherit;
     opacity: 1;
 }
+
 .btn {
 	background-color: rgb(221,221,221) !important;
+}
+
+.form-section {
+	padding: 20px 20px 5px 20px;
+    margin: 20px 0;
+    background: #efefef;
+    border-radius: 5px;
+}
+
+.code-display.form-control:disabled {
+    background-color: #ffffff;
 }
 
 .list-container {
@@ -26,6 +43,7 @@
 	min-height: 370px;
 	font-family: "monospace","Segoe UI",Roboto,"Helvetica Neue",Arial,"Noto Sans",sans-serif;
 	font-size: 0.85rem;
+	background-color: #ffffff;
 }
 
 #api-key-feedback:after {
@@ -48,7 +66,8 @@
 }
 
 .terms-of-use-section {
-	width: 35%;
+	width: 70%;
+    margin-top: 20px;
 }
 
 .terms-of-use {
