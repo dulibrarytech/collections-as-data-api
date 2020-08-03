@@ -178,6 +178,8 @@ var CadApiForm = (function() {
 					document.getElementById("terms-ack").style.display = "flex";
 					resetForm();
 					document.getElementById("api-key-feedback").style.display = "block";
+					document.getElementById("api-key").disabled = true;
+					document.getElementById("api-key-set").disabled = true;
 				}
 				else {
 					console.log("Invalid key");

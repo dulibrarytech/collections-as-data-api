@@ -17,9 +17,9 @@
 					<input id="email" type="email" class="form-control" placeholder="Enter email to receive API key">
 					<button type="submit" class="btn btn-default" onclick="CadApiForm.submitEmailAddress()">Submit</button>
 				</div>
-				<div id="api-key-set" class="form-group form-inline">
+				<div class="form-group form-inline">
 					<input id="api-key" type="text" class="form-control" placeholder="API key" onclick="this.style.color = 'black'; this.value = ''; this.placeholder = 'API key'"/>
-					<button type="submit" class="btn btn-default" onclick="CadApiForm.setApiKey()">Set key</button>
+					<button id="api-key-set" type="submit" class="btn btn-default" onclick="CadApiForm.setApiKey()">Set key</button>
 					<div id="api-key-feedback" class="invalid" style="display: none"></div>
 				</div>
 			</div>
