@@ -141,26 +141,32 @@ var CadApiForm = (function() {
 	submitEmailAddress = function() {
 		let address = document.getElementById("email").value.substring(0, config.maxEmailChars),
 			url = config.apiDomain + "/form/requestKey?email=" + address;
-			
-		ajaxRequest("post", url, function(error, status, response) {
-			document.getElementById("email").style.color = "green";
-			document.getElementById("email").value = "Request for API key sent.";
-			setTimeout(function() { 
-				document.getElementById("email").style.color = "inherit";
-				document.getElementById("email").value = "";
-				document.getElementById("email").placeholder = "Enter email to receive API key"; 
-			}, 3000);
 
-			if(error) {
-				console.log("Error sending API key request:", error);
-			}
-			else if(response) {
-				console.log("Request for API key sent successfully");
-			}
-			else {
-				console.log("Error sending API key notification email")
-			}
-		});
+		if(address.match(/^([a-zA-Z0-9_\-\.]+)@([a-zA-Z0-9_\-\.]+)\.([a-zA-Z]{2,5})$/gm)) {
+			ajaxRequest("post", url, function(error, status, response) {
+				document.getElementById("email").style.color = "green";
+				document.getElementById("email").value = "Request for API key sent.";
+				setTimeout(function() { 
+					document.getElementById("email").style.color = "inherit";
+					document.getElementById("email").value = "";
+					document.getElementById("email").placeholder = "Enter email to receive API key"; 
+				}, 3000);
+
+				if(error) {
+					console.log("Error sending API key request:", error);
+				}
+				else if(response) {
+					console.log("Request for API key sent successfully");
+				}
+				else {
+					console.log("Error sending API key notification email")
+				}
+			});
+		}
+		else {
+			document.getElementById("email").style.color = "red";
+			document.getElementById("email").value = "Invalid email address";
+		}
 	}
 
 	setApiKey = function() {
