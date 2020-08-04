@@ -3,16 +3,23 @@
 A nice project with a nice description
 
 ---
-## Requirements
+## Configuration
 
-## .env
+### /public/config/config.js
+Set the base url of the app
 
-NODE_ENV=dev|prod
-APPLICATION_PORT=
-APPLICATION_DOMAIN=
+### .env
+
+NODE_ENV=development|production
+APPLICATION_PORT={nodejs port}
+APPLICATION_DOMAIN={public url of app}
+PROTOCOL={http|https}
 API_KEY=
-REPOSITORY_DOMAIN=
-ELASTICSEARCH_HOST=
+REPOSITORY_DOMAIN={duracloud url}
+ELASTICSEARCH_HOST={elastic url}
 ELASTICSEARCH_PORT=
-ELASTICSEARCH_INDEX=
-ELASTICSEARCH_INDEX_TYPE=
+ELASTICSEARCH_INDEX={elastic index name}
+ELASTICSEARCH_INDEX_TYPE={ex. data}
+DISCOVERY_APPLICATION_DOMAIN={url of digital collections@du}
+MAIL_SERVER={local mail server}
+MAIL_SERVER_PORT=
