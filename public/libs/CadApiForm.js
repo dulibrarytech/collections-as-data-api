@@ -81,7 +81,7 @@ var CadApiForm = (function() {
 		resetDisplays();
 		let endpoint = config.apiFormEndpoints[endpointId];
 		document.getElementById("endpoint-select").value = endpointId;
-		document.getElementById("query-display").value = endpoint.uri;
+		document.getElementById("query-display").value = config.apiDomain + endpoint.uri;
 
 		// Display the first parameter select box
 		if(endpoint.params && endpoint.params.length > 0) {
@@ -100,7 +100,7 @@ var CadApiForm = (function() {
 
 		for(var uri of uris) {
 			if(uri.length > 0) {
-				urls.push(config.apiDomain + uri);
+				urls.push(uri);
 			}
 		}
 
@@ -108,6 +108,7 @@ var CadApiForm = (function() {
 		let endchar = "", paramData;
 		for(var url of urls) {
 			url += "?key=" + apiKey;
+				console.log("url found in ajax", url)
 			ajaxRequest("get", url, function(error, status, response) {
 				if(error) {
 					console.log(error);
@@ -215,7 +216,7 @@ var CadApiForm = (function() {
 		if(cache[paramName]) {
 			delete cache[paramName];
 		}
-		document.getElementById("query-display").value = getUrlParamValues(config.apiFormEndpoints[endpointId].uri);
+		document.getElementById("query-display").value = getUrlParamValues(config.apiDomain + config.apiFormEndpoints[endpointId].uri);
 	}
 
 	onSelectParam = function(selectBox) {
@@ -243,7 +244,7 @@ var CadApiForm = (function() {
 
 	onCheckParam = function(checkBox) {
 		let endpointId = document.getElementById("endpoint-select").value,
-			uri = config.apiFormEndpoints[endpointId].uri,
+			uri = config.apiDomain + config.apiFormEndpoints[endpointId].uri,
 			paramName = checkBox.name;
 
 		cache.currentParam = paramName;
@@ -386,7 +387,7 @@ var CadApiForm = (function() {
 		       callback(null, 200, xhttp.responseText);
 		    }
 		    else {
-		    	let message = "Url: " + url + " Server responded with status " + this.status + ", ready state " + this.readyState;
+		    	let message = "Server responded with status " + this.status + ", ready state " + this.readyState;
 		    	callback(message, this.status, null)
 		    }
 		};
@@ -424,7 +425,7 @@ var CadApiForm = (function() {
 
 	refreshQueryDisplay = function() {
 		let endpointId = document.getElementById("endpoint-select").value;
-		let uri = config.apiFormEndpoints[endpointId].uri;
+		let uri = config.apiDomain + config.apiFormEndpoints[endpointId].uri;
 		document.getElementById("query-display").value = getUrlParamValues(uri);
 	}
 
