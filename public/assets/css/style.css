@@ -72,12 +72,29 @@
 }
 
 .terms-of-use-section {
-	width: 70%;
+	width: 100%;
     margin-top: 20px;
 }
 
 .terms-of-use {
 	max-height: 600px;
+}
+
+.terms-of-use h5 {
+    font-weight: bold;
+}
+
+.terms-of-use ul {
+    list-style-type: decimal;
+}
+
+.terms-of-use li {
+    margin-top: 20px;
+}
+
+.terms-of-use li p {
+    margin-top: 20px;
+    margin-left: 30px;
 }
 
 @media only screen and (min-width: 768px) {
