@@ -77,7 +77,10 @@ var CadApiForm = (function() {
 	}
 
 	onSelectEndpointOption = function(endpointId) {
-		cache = {};
+		cache = {
+			collectionId: "",
+			itemId: []
+		};
 		resetDisplays();
 		let endpoint = config.apiFormEndpoints[endpointId];
 		document.getElementById("endpoint-select").value = endpointId;
@@ -104,16 +107,21 @@ var CadApiForm = (function() {
 			}
 		}
 
+		document.getElementById("query-response-display").value = "";
+
 		// Loop urls, fetch
 		let endchar = "", paramData;
 		for(var url of urls) {
 			url += "?key=" + apiKey;
-				console.log("url found in ajax", url)
 			ajaxRequest("get", url, function(error, status, response) {
-				if(error) {
+				if(error && status != 0) {
 					console.log(error);
+					document.getElementById("query-response-display").value = ("HTTP Status: " + status + "\nError: " + error);
 				}
-				else {
+				else if(status != 200 && status != 0) {
+					document.getElementById("query-response-display").value = ("HTTP Status:" + status);
+				}
+				else if(response) {
 					let responseObject = JSON.parse(response),
 			       		data = responseObject.data || {};
 
@@ -243,9 +251,7 @@ var CadApiForm = (function() {
 				}
 			}
 		}
-		else {
-			displayTemplate(endpointId);
-		}
+		displayTemplate(endpointId);
 	}
 
 	onCheckParam = function(checkBox) {
@@ -256,6 +262,7 @@ var CadApiForm = (function() {
 		cache.currentParam = paramName;
 		uri = uri.replace("{" + paramName + "}", checkBox.value) + "\n\n";
 		uri = getUrlParamValues(uri);
+		document.getElementById("query-response-display").value = "";
 
 		if(checkBox.checked) {
 			if(!cache[paramName] || typeof cache[paramName] == "string") {
