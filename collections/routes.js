@@ -36,4 +36,13 @@ module.exports = function(app) {
 
     app.route('/collections/:collection_id/items/:item_id/transcript')
         .get(Collections.collectionItemTranscript);
+
+    // app.route('/download/collection/')
+    //     .get(Collections.downloadCollection);
+
+    // app.route('/download/collection/items')
+    //     .get(Collections.downloadCollectionItems);
+
+    // app.route('/download/collection/transcripts')
+    //     .get(Collections.downloadCollectionTranscripts);
 };
