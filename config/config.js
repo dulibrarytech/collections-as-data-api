@@ -1,3 +1,7 @@
+/**
+ *
+ */
+
 'use strict';
 
 module.exports = {
@@ -13,6 +17,16 @@ module.exports = {
     discoveryApiDomain: process.env.DISCOVERY_APPLICATION_DOMAIN,
     mailServer: process.env.MAIL_SERVER,
     mailServerPort: process.env.MAIL_SERVER_PORT,
+
+    objectAccessDomain: "https://specialcollections.du.edu",
+    objectAccessPath: "/object",
+    objectAccessParams: "",
+    thumbnailAccessDomain: "https://specialcollections.du.edu",
+    thumbnailAccessPath: "/datastream",
+    thumbnailAccessParams: "/tn",
+    iiifAccessDomain: "https://specialcollections.du.edu",
+    iiifAccessPath: "/iiif",
+    iiifAccessParams: "/manifest",
 
     itemMetadataFields: {
         "Title": {
