@@ -14,10 +14,7 @@ var express = require('express'),
 module.exports = function () {
     var app = express();
 
-    if (process.env.NODE_ENV === 'production') {
-        app.use(compression());
-    }
-
+    app.use(compression());
     app.use(express.static('./public'));
     app.set('views', './views');
     app.set('view engine', 'ejs');
