@@ -1,9 +1,17 @@
 /**
- *
+ * Configuration settings for the DPLA module
  */
 'use strict';
 
 module.exports = {
+	/*
+	 * Number of collections to fetch, -1 for all collections 
+	 */
+	maxCollections: 10,
+
+	/*
+	 * Index fields to display in the data for each bject
+	 */
 	itemMetadataFields: {
         "default": {
             "title": {

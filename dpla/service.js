@@ -9,13 +9,9 @@ const JsonParser = require('../libs/json-parser.js');
 
 var createDataObject = function(collectionObjects, callback) {
 	var objects = [], object, fields = {};
-	// collectionObjects should be a 2D array
-		//console.log("createDataObject", collectionObjects)
-
 	for(var collection of collectionObjects) {
 		for(var item of collection) {
 			object = item._source || {};
-				//console.log("TEST object", item)
 			fields = {};
 
 			// Fields not in configuration (built-in)
@@ -27,6 +23,7 @@ var createDataObject = function(collectionObjects, callback) {
 			fields["collectionUrl"] = config.objectAccessDomain + config.objectAccessPath + "/" + (object.is_member_of_collection || "null") + config.objectAccessParams;
 			fields["iiifManifest"] = config.iiifAccessDomain + config.iiifAccessPath + "/" + (object.pid || "null") + config.iiifAccessParams;
 
+			// Index fields (in configuration)
 			var data = {};
 			JsonParser.getItemMetadataValues(dplaConfig.itemMetadataFields["default"], object, data);
 
@@ -58,17 +55,12 @@ exports.getObjectArray = async function(callback) {
 		console.log(error);
 	})
 	.then(async list => {
-
-		/*
-		 * DEV: Test List
-		 */
-		list.length = 10;
-		/*
-		 * End Test List 
-		 */
+		if(dplaConfig.maxCollections > 0) {
+			list.length = dplaConfig.maxCollections;
+		}
 
 		collectionCount = list.length;
-		console.log(collectionCount + " collections found");
+		console.log("Collection count: " + collectionCount);
 
 		for(var collection of list) {
 			collectionTitles[collection.id] = collection.title;
@@ -76,7 +68,7 @@ exports.getObjectArray = async function(callback) {
 
 		var response;
 		for(var collection of list) {
-			console.log("Fetching collection data for", collection.title);
+			console.log("Fetching data for collection", collection.title);
 			response = await es.search({
 	      index: config.elasticIndex,
 	      type: "data",
@@ -102,7 +94,7 @@ exports.getObjectArray = async function(callback) {
       			object._source["collection_title"] = collectionTitles[object._source.is_member_of_collection] || "No collection title";
       			collectionObjects.push(object);
       	}
-      	console.log("Adding collection objects for", collectionTitles[object._source.is_member_of_collection]);
+      	console.log(collectionObjects.length + " objects found");
       	collections.push(collectionObjects);
       }
       else {
