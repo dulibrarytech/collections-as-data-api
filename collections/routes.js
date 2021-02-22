@@ -15,11 +15,6 @@ module.exports = function(app) {
         }
 	}
 
-    app.route('/')
-        .get(function(req, res) {
-            res.sendStatus(403);
-    });
-
     app.use(validateKey);
     
     app.route('/collections')

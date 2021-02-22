@@ -1,9 +1,9 @@
 'use strict'
 
-var config = require("../config/config-dpla-feed.js"),
+var config = require("../config/config-dpla.js"),
     DPLAController = require('./controller');
 
 module.exports = function(app) {
-    app.route('/dpla/feed')
+    app.route('/dplaFeed')
         .get(DPLAController.getDPLAFeed);
 };

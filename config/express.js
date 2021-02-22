@@ -23,11 +23,16 @@ module.exports = function () {
     app.set('view engine', 'ejs');
     app.use(bodyParser.json());
 
+    app.route('/')
+        .get(function(req, res) {
+            res.sendStatus(403);
+    });
+
+    require('../dpla/routes.js')(app);
     require('../api-form/routes.js')(app);
     require('../collections/routes.js')(app);
     //require('../collections/routes/api_v1.js')(app);
     require('../search/routes.js')(app);
-    require('../dpla/routes.js')(app);
 
     return app;
 };
