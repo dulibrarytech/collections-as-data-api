@@ -3,66 +3,28 @@
 const es = require('../config/index'),
       config = require('../config/config'),
       Helper = require("./helper"),
-      Metadata = require("../libs/metadata"),
+      JsonParser = require("../libs/json-parser"),
       Formatter = require("../libs/formatter");
 
-var queryIndex = function(data, callback) {
-	data["index"] = config.elasticIndex;
-	data["type"] = config.indexType;
-	data["from"] = 0;
-	data["size"] = 10000;
-	es.search(data, function(error, response, status) {
+var fetchCollection = function(id, callback) {
+	queryIndex({
+  		_source: ["title", "description", "abstract"],
+  		body: {
+  			query: {
+  				bool: {
+  					must:[{"match_phrase": {"pid": id}}],
+  					filter: [{"match_phrase": {"object_type": "collection"}}]
+  				}
+  			}
+        }
+	},
+	function(error, response) {
 		if(error) {
-			console.error("Elastic error: %s", error.message);
-			console.error("Elastic returned a status of: %s", error.statusCode);
 			callback(error, null);
-		}
-		else if(status != 200) {
-			callback("Elastic server returned a status of " + status, null)
 		}
 		else {
 			callback(null, response);
 		}
-	});
-}
-
-exports.getCollectionList = function() {
-	return new Promise(function(fulfill, reject) {
-		queryIndex({
-      		_source: ["pid", "title"],
-      		body: {
-      			query: {
-      				bool: {
-      					filter: [{"match_phrase": {"object_type": "collection"}}]
-      				}
-      			},
-	  			"sort" : [
-			        { "title.keyword" : {"order" : "asc"}}
-			    ]
-	        }
-		},
-		function(error, response) {
-			if(error) {
-				reject("Elastic error: " + error.message);
-			}
-			else {
-				try {
-					let collections = response.hits.hits || [],
-						list = [];
-
-					for(let collection of collections) {
-						list.push({
-							id: collection._source.pid || "",
-							title: collection._source.title || "No title"
-						})
-					}
-					fulfill(list);
-				}
-				catch(e) {
-					reject(e.message);
-				}
-			}
-		});
 	});
 }
 
@@ -158,6 +120,46 @@ exports.getCollectionItems = function(collectionID) {
 	});
 }
 
+exports.getCollectionList = function() {
+	return new Promise(function(fulfill, reject) {
+		queryIndex({
+      		_source: ["pid", "title"],
+      		body: {
+      			query: {
+      				bool: {
+      					filter: [{"match_phrase": {"object_type": "collection"}}]
+      				}
+      			},
+	  			"sort" : [
+			        { "title.keyword" : {"order" : "asc"}}
+			    ]
+	        }
+		},
+		function(error, response) {
+			if(error) {
+				reject("Elastic error: " + error.message);
+			}
+			else {
+				try {
+					let collections = response.hits.hits || [],
+						list = [];
+
+					for(let collection of collections) {
+						list.push({
+							id: collection._source.pid || "",
+							title: collection._source.title || "No title"
+						})
+					}
+					fulfill(list);
+				}
+				catch(e) {
+					reject(e.message);
+				}
+			}
+		});
+	});
+}
+
 exports.getItemData = function(collectionID, itemID) {
 	return new Promise(function(fulfill, reject) {
 		fetchCollection(collectionID, function(error, response) {
@@ -183,7 +185,7 @@ exports.getItemData = function(collectionID, itemID) {
 						try {
 							if(response.hits.hits && response.hits.hits.length > 0) {
 								let item = response.hits.hits[0]._source || {};
-								Metadata.getItemMetadataValues(item, data);
+								JsonParser.getItemMetadataValues(config.itemMetadataFields, item, data);
 								Formatter.getRepositoryResourceUrl(data);
 								fulfill(Helper.addMetadataAttributes(data));
 							}
@@ -252,21 +254,19 @@ exports.getItemTranscript = function(collectionID, itemID) {
 	});
 }
 
-var fetchCollection = function(id, callback) {
-	queryIndex({
-  		_source: ["title", "description", "abstract"],
-  		body: {
-  			query: {
-  				bool: {
-  					must:[{"match_phrase": {"pid": id}}],
-  					filter: [{"match_phrase": {"object_type": "collection"}}]
-  				}
-  			}
-        }
-	},
-	function(error, response) {
+var queryIndex = function(data, callback) {
+	data["index"] = config.elasticIndex;
+	data["type"] = config.indexType;
+	data["from"] = 0;
+	data["size"] = 10000;
+	es.search(data, function(error, response, status) {
 		if(error) {
+			console.error("Elastic error: %s", error.message);
+			console.error("Elastic returned a status of: %s", error.statusCode);
 			callback(error, null);
+		}
+		else if(status != 200) {
+			callback("Elastic server returned a status of " + status, null)
 		}
 		else {
 			callback(null, response);

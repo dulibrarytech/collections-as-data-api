@@ -16,7 +16,7 @@
 
  /**
  * @file 
- * Version 1.2.0
+ * Version 1.2.1
  *
  * Digital-DU index object (json) parse functions
  * @summary Generate data for the object template metadata displays
@@ -33,7 +33,7 @@ exports.getItemMetadataValues = function(map, item, data = {}) {
 		values = [],
 		pathArray;
 
-	console.log("TEST mf", metadataFields)
+	//console.log("TEST mf", metadataFields)
 
 	for(var key in metadataFields) {
 
@@ -41,7 +41,7 @@ exports.getItemMetadataValues = function(map, item, data = {}) {
 
 		values = [];
 		pathArray = metadataFields[key].path.split(".") || [];
-			console.log("TEST path array", typeof pathArray)
+			//console.log("TEST path array", typeof pathArray)
 
 		extractValues(pathArray, displayRecord, metadataFields[key].matchField || null, metadataFields[key].matchValue || null, metadataFields[key].excludeField || null, metadataFields[key].excludeValue || null, metadataFields[key].condition || "true", values);
 		if(values.length > 0) {

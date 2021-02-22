@@ -288,6 +288,7 @@ var CadApiForm = (function() {
 				refreshQueryDisplay();
 			}
 		}	
+			console.log("TEST cache", cache.itemId)
 		displayTemplate(endpointId);
 	}
 
@@ -393,7 +394,7 @@ var CadApiForm = (function() {
 		}
 	}
 
-	ajaxRequest = function(type, url, callback) {
+	ajaxRequest = function(type, url, callback, body=null) {
 		var xhttp = new XMLHttpRequest();
 		xhttp.onreadystatechange = function() {
 		    if (this.readyState == 4 && this.status == 200) {		      
@@ -409,7 +410,12 @@ var CadApiForm = (function() {
 			let param = url.substring(url.indexOf("?")+1).split("="),
 				data = {};
 
+			// If (body)
+			data = body;
+
+			// Else (no body) TODO convert to loop to allow multiple params
 			data[param[0]] = param[1];
+
 			url = url.substring(0, url.indexOf("?"));
 			xhttp.open("POST", url, true);
 			xhttp.setRequestHeader("Content-type", "application/json");
