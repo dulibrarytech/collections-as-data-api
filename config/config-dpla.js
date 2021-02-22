@@ -7,7 +7,7 @@ module.exports = {
 	/*
 	 * Number of collections to fetch, -1 for all collections 
 	 */
-	maxCollections: 10,
+	maxCollections: -1,
 
 	/*
 	 * Index fields to display in the data for each bject
