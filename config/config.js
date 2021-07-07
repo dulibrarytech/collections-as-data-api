@@ -6,7 +6,7 @@
 
 module.exports = {
     nodeEnv: process.env.NODE_ENV,
-    apiKey: process.env.API_KEY || "",
+    apiKey: process.env.MASTER_API_KEY || "",
     appDomain: process.env.APPLICATION_DOMAIN,
     elasticHost: process.env.ELASTICSEARCH_HOST,
     elasticPort: process.env.ELASTICSEARCH_PORT,
