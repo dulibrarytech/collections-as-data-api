@@ -18,39 +18,26 @@ const config = require("../config/config.js"),
 
 const encryption_key = config.encryptionKey;
 const initialization_vector = config.encryptionInitVector;
+const algorithm = "aes-256-cbc";
 
 exports.createApiKey = function() {
-	var cipher = crypto.createCipheriv('aes-256-cbc', Buffer.from(encryption_key), Buffer.from(initialization_vector))
+	var cipher = crypto.createCipheriv(algorithm, Buffer.from(encryption_key), Buffer.from(initialization_vector))
 	var newKey = cipher.update(crypto.randomBytes(8), 'utf8', 'hex')
 	newKey += cipher.final('hex')
 	return newKey;
 }
 
-exports.encryptHex = function(hexString) {
-	var cipher = crypto.createCipheriv('aes-256-cbc', Buffer.from(encryption_key), Buffer.from(initialization_vector))
-	var encrypted = cipher.update(hexString, 'hex', 'hex')
-	encrypted += cipher.final('hex')
+exports.encryptString = function(string, inputFormat, outputFormat) {
+	var cipher = crypto.createCipheriv(algorithm, Buffer.from(encryption_key), Buffer.from(initialization_vector))
+	var encrypted = cipher.update(string, inputFormat, outputFormat)
+	encrypted += cipher.final(outputFormat)
 	return encrypted;
 }
 
-exports.decryptHex = function(hexString) {
-	const decipher = crypto.createDecipheriv('aes-256-cbc', Buffer.from(encryption_key), Buffer.from(initialization_vector))
-  	let decrypted = decipher.update(hexString, 'hex', 'hex')
-  	decrypted += decipher.final('hex')
-  	return decrypted;
-}
-
-exports.encryptString = function(string) {
-	var cipher = crypto.createCipheriv('aes-256-cbc', Buffer.from(encryption_key), Buffer.from(initialization_vector))
-	var encrypted = cipher.update(string, 'utf8', 'hex')
-	encrypted += cipher.final('hex')
-	return encrypted;
-}
-
-exports.decryptString = function(string) {
-	const decipher = crypto.createDecipheriv('aes-256-cbc', Buffer.from(encryption_key), Buffer.from(initialization_vector))
-  	let decrypted = decipher.update(string, 'hex', 'utf8')
-  	decrypted += decipher.final('utf8')
+exports.decryptString = function(string, inputFormat, outputFormat) {
+	const decipher = crypto.createDecipheriv(algorithm, Buffer.from(encryption_key), Buffer.from(initialization_vector))
+  	let decrypted = decipher.update(string, inputFormat, outputFormat)
+  	decrypted += decipher.final(outputFormat)
   	return decrypted;
 }
 
