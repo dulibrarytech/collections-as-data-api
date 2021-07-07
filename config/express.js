@@ -30,6 +30,16 @@ module.exports = function () {
     require('../collections/routes.js')(app);
     //require('../collections/routes/api_v1.js')(app);
     require('../search/routes.js')(app);
+    require('../user/routes.js')(app);
+    require('../test/unit/routes.js')(app);
+
+    let crypto;
+
+    try {
+      crypto = require('crypto');
+    } catch (err) {
+      console.log('crypto support is disabled!');
+    }
 
     return app;
 };

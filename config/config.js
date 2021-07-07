@@ -17,6 +17,8 @@ module.exports = {
     discoveryApiDomain: process.env.DISCOVERY_APPLICATION_DOMAIN,
     mailServer: process.env.MAIL_SERVER,
     mailServerPort: process.env.MAIL_SERVER_PORT,
+    encryptionKey: process.env.ENCRYPTION_KEY,
+    encryptionInitVector: process.env.ENCRYPTION_INITIALIZATION_VECTOR,
 
     objectAccessDomain: "https://specialcollections.du.edu",
     objectAccessPath: "/object",
