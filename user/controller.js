@@ -14,15 +14,11 @@
  'use strict'
 
 var config = require("../config/config.js"),
-	User = require("./service");
+	Service = require("./service");
 
-exports.validateKey = function(req, res, next) {
- 		console.log("TEST validate():", req.query.key)
-    if(config.nodeEnv == "development") {
-        next();
-    }
-    else if(req.query.key) {
-    	if(findKey(req.query.key) !== false) {
+exports.validateKey = async function(req, res, next) {
+    if(req.query.key) {
+    	if(await Service.validateKey(req.query.key) !== false) {
     		next();
     	}
     	else {

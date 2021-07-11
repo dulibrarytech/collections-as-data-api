@@ -13,29 +13,15 @@
 
  'use strict'
 
-const config = require("../config/config.js"),
-	db = require("../libs/database.js").connection;
-	
-var findUserByKey = async function(key) {
-	return new Promise(function(fulfill, reject) {
-		db.query(`SELECT user_id FROM users AS id WHERE api_key='${key}'`, function (error, results, fields) {
-	  	if (error) {
-	  		console.log(`Database error: ${error}`);
-	  		fulfill(null);
-	  	}
-	  	else {
-	  			console.log("TEST db q results", results)
-	  		if(results.length > 0) {
-	  			fulfill(results[0].user_id);
-	  		}
-	  		else {
-	  			fulfill(null);
-	  		}
-	  	}
-		});
-	});
-}
+var mysql      = require('mysql');
+var connection = mysql.createConnection({
+  host     : 'localhost',
+  user     : 'root',
+  password : 'jryn003@',
+  database : 'cad_api'
+});
+connection.connect();
 
 module.exports = {
-	findUserByKey
+	connection
 }
