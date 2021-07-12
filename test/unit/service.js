@@ -1,14 +1,18 @@
 'use strict';
 
 const config = require('../../config/config.js'),
+	UserModel = require('../../user/model.js'),
 	Keys = require('../../libs/keys.js');
 
 exports.runLibraryTests = function() {
-	if(true) {
-		console.log(test_keys_createApiKey() ? "Pass" : "Fail");
-		console.log(test_keys_encryptString() ? "Pass" : "Fail");
-		console.log(test_keys_decryptString() ? "Pass" : "Fail");
-	}
+	console.log(test_keys_createApiKey() ? "Pass" : "Fail");
+	console.log(test_keys_encryptString() ? "Pass" : "Fail");
+	console.log(test_keys_decryptString() ? "Pass" : "Fail");
+}
+
+exports.runDatabaseTests = async function() {
+	console.log(await test_database_findUserByKey() ? "Pass" : "Fail");
+	console.log(await test_database_createUserRecord() ? "Pass." : "Fail");
 }
 
 var test_keys_createApiKey = function() {
@@ -69,8 +73,52 @@ var test_keys_decryptString = function() {
 		if(decrypted != "test@example.com") {throw "Decrypted value is not as expected"}
 	}
 	catch(e) {
-		console.log(e);
+		console.log("Exception caught:", e);
 		result = false;
 	}
+	return result;
+}
+
+var test_database_findUserByKey = async function() {
+	console.log("test_database_findUserByKey:")
+	let result = true;
+
+	try {
+		let user = await UserModel.findUserByKey("31a5e8e07801680985a01b49d6c4dd768e3d59200fcd89b0c6f40efb418354fd");
+		if(user) {
+			console.log("test_database_findUserByKey Database response:", user);
+		}
+		else {
+			console.log("Database error");
+			result = false;
+		}
+	}
+	catch(e) {
+		console.log("Exception caught:", e);
+		result = false;
+	}
+
+	return result;
+}
+
+var test_database_createUserRecord = async function() {
+	console.log("test_database_createUserRecord:")
+	let result = true;
+
+	try {
+		let user = await UserModel.createUserRecord("test.example.com", "testkey");
+		if(user) {
+			console.log("test_database_createUserRecord Database response:", user);
+		}
+		else {
+			console.log("Database error");
+			result = false;
+		}
+	}
+	catch(e) {
+		console.log("Exception caught:", e);
+		result = false;
+	}
+	console.log("C", result)
 	return result;
 }
