@@ -148,7 +148,7 @@ var CadApiForm = (function() {
 
 	submitEmailAddress = function() {
 		let address = document.getElementById("email").value.substring(0, config.maxEmailChars),
-			url = config.apiDomain + "/form/requestKey?email=" + address;
+			url = config.apiDomain + "/form/requestKey";
 
 		if(address.match(/^([a-zA-Z0-9_\-\.]+)@([a-zA-Z0-9_\-\.]+)\.([a-zA-Z]{2,5})$/gm)) {
 			ajaxRequest("post", url, function(error, status, response) {
@@ -161,7 +161,9 @@ var CadApiForm = (function() {
 				}, 3000);
 
 				if(error) {
-					console.log("Error sending API key request:", error);
+					document.getElementById("email").style.color = "red";
+					document.getElementById("email").value = "Error";
+					console.log("Error requesting API key:", error);
 				}
 				else if(response) {
 					console.log("Request for API key sent successfully");
@@ -169,7 +171,7 @@ var CadApiForm = (function() {
 				else {
 					console.log("Error sending API key notification email")
 				}
-			});
+			}, {email: address});
 		}
 		else {
 			document.getElementById("email").style.color = "red";
@@ -410,13 +412,10 @@ var CadApiForm = (function() {
 			let param = url.substring(url.indexOf("?")+1).split("="),
 				data = {};
 
-			// If (body)
-			data = body;
+			if(body) {
+				data = body;
+			}
 
-			// Else (no body) TODO convert to loop to allow multiple params
-			data[param[0]] = param[1];
-
-			url = url.substring(0, url.indexOf("?"));
 			xhttp.open("POST", url, true);
 			xhttp.setRequestHeader("Content-type", "application/json");
 			xhttp.send(JSON.stringify(data));

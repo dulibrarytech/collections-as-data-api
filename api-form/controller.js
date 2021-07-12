@@ -1,25 +1,39 @@
 'use strict';
  
 const config = require('../config/config'),
-	  Service = require('./service');
+	  Service = require('./service'),
+	  UserService = require('../user/service.js')
 
 exports.validateKey = function(req, res) {
 	let isValid = Service.validateKey(req.query.key || "");
 	res.send({isValid:isValid})
 }
 
-exports.sendApiKeyEmail = function(req, res) {
+exports.requestApiKey = function(req, res) {
 	let email = req.body.email || "",
 		response = false;
-	Service.sendApiKeyEmail(email, Service.getKey(), function(error, response) {
-		if(error) { 
-			console.log("Error: ", error) 
+
+	if(email.match(/^([a-zA-Z0-9_\-\.]+)@([a-zA-Z0-9_\-\.]+)\.([a-zA-Z]{2,5})$/gm)) {
+		let apikey = UserService.addUser(email);
+		if(apikey) {
+			Service.sendApiKeyEmail(email, apikey, function(error, response) {
+				if(error) { 
+					console.log("Error: ", error);
+					res.status(500);
+				}
+				else {
+					res.status(200);
+				}
+				res.send();
+			});
 		}
 		else {
-			response = true;
+			res.status(500).send({ error: "Error adding user, can not create api key" });
 		}
-		res.send(response);
-	});
+	}
+	else {
+		res.status(400).send({ error: "Invalid email address" });
+	}
 }
 
 exports.renderForm = function(req, res) {
