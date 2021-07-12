@@ -12,13 +12,14 @@
  */
 
  'use strict'
+const config = require("../config/config.js"),
+	  mysql = require('mysql');
 
-var mysql      = require('mysql');
 var connection = mysql.createConnection({
-  host     : 'localhost',
-  user     : 'root',
-  password : 'jryn003@',
-  database : 'cad_api'
+  host     : config.databaseHost,
+  user     : config.databaseUser,
+  password : config.databasePassword,
+  database : config.databaseName
 });
 connection.connect();
 

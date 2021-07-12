@@ -19,6 +19,10 @@ module.exports = {
     mailServerPort: process.env.MAIL_SERVER_PORT,
     encryptionKey: process.env.ENCRYPTION_KEY,
     encryptionInitVector: process.env.ENCRYPTION_INITIALIZATION_VECTOR,
+    databaseHost: process.env.DATABASE_HOST,
+    databaseUser: process.env.DATABASE_USER,
+    databasePassword: process.env.DATABASE_PWD,
+    databaseName: process.env.DATABASE_NAME,
 
     objectAccessDomain: "https://specialcollections.du.edu",
     objectAccessPath: "/object",
