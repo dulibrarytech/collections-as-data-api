@@ -30,8 +30,6 @@ exports.search = function(req, res) {
 
 	try {
 		if(typeof query == "string") {
-				console.log("TEST page", page)
-				console.log("TEST pageSize", pageSize)
 			Service.luceneSearchIndex(query, page, pageSize, function(error, response) {
 				if(error) {
 					sendErrorResponse(res, error.message);

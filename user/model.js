@@ -20,11 +20,10 @@ var findUserByKey = async function(key) {
 	return new Promise(function(fulfill, reject) {
 		db.query(`SELECT user_id FROM users AS id WHERE api_key='${key}'`, function (error, results, fields) {
 	  	if (error) {
-	  		console.log(`Database error: ${error}`);
+	  		console.log(`Mysql error: ${error}`);
 	  		fulfill(null);
 	  	}
 	  	else {
-	  			console.log("TEST db q results", results)
 	  		if(results.length > 0) {
 	  			fulfill(results[0].user_id);
 	  		}
@@ -36,6 +35,26 @@ var findUserByKey = async function(key) {
 	});
 }
 
+var createUserRecord = async function(email, key) {
+	return new Promise(function(fulfill, reject) {
+		db.query(`INSERT INTO users (user_id, api_key) VALUES ('${email}', '${key}')`, function (error, results, fields) {
+	  	if (error) {
+	  		console.log(`Mysql error: ${error}`);
+	  		fulfill(null);
+	  	}
+	  	else {
+	  		if(results.insertId) {
+	  			fulfill(results.insertId);
+	  		}
+	  		else {
+	  			fulfill(null);
+	  		}
+	  	}
+		});
+	});
+}
+
 module.exports = {
-	findUserByKey
+	findUserByKey,
+	createUserRecord
 }

@@ -1,43 +1,22 @@
 'use strict'
 
 var config = require("../config/config.js"),
-    Collections = require('./controller');
+    Collections = require('./controller'),
+    User = require('../user/controller');
 
 module.exports = function(app) {
-
-	var validateKey = function(req, res, next) {
-        if(req.query.key && req.query.key == config.apiKey ||
-            config.nodeEnv == "development") {
-            next();
-        }
-		else {
-             res.status(403).send('API key is required')
-        }
-	}
-
-    app.use(validateKey);
-    
     app.route('/collections')
-        .get(Collections.collections);
+        .get(User.validateKey, Collections.collections);
 
     app.route('/collections/:collection_id')
-        .get(Collections.collection);
+        .get(User.validateKey, Collections.collection);
 
     app.route('/collections/:collection_id/items')
-        .get(Collections.collectionItems);
+        .get(User.validateKey, Collections.collectionItems);
 
     app.route('/collections/:collection_id/items/:item_id')
-        .get(Collections.collectionItem);
+        .get(User.validateKey, Collections.collectionItem);
 
     app.route('/collections/:collection_id/items/:item_id/transcript')
-        .get(Collections.collectionItemTranscript);
-
-    // app.route('/download/collection/')
-    //     .get(Collections.downloadCollection);
-
-    // app.route('/download/collection/items')
-    //     .get(Collections.downloadCollectionItems);
-
-    // app.route('/download/collection/transcripts')
-    //     .get(Collections.downloadCollectionTranscripts);
+        .get(User.validateKey, Collections.collectionItemTranscript);
 };

@@ -21,18 +21,46 @@ var validateKey = async function(key) {
 	let isValid = false;
 
 	if(key.length % 2 == 0) {
-		let encKey = Keys.encryptString(key, "hex", "hex"),
-				userId = await Model.findUserByKey(encKey);
-				
-		if(userId) {
-			console.log("User access:", Keys.decryptString(userId, "hex", "utf8"));
-			isValid = true;
+		try {
+			let encKey = Keys.encryptString(key, "hex", "hex"),
+					userId = await Model.findUserByKey(encKey);
+
+			if(userId) {
+				console.log("User access:", Keys.decryptString(userId, "hex", "utf8"));
+				isValid = true;
+			}
+		}
+		catch(e) {
+			console.log("Error validating key: ", error);
 		}
 	}
 
 	return isValid;
 }
 
+var addUser = async function(email) {
+	console.log(`User request for api key, email address: ${email}`)
+	let key = null;
+
+	try {
+		// Gen key
+		let newKey = Keys.createApiKey();
+		let encKey = Keys.encryptString(newKey, "hex", "hex");
+		let encEmail = Keys.encryptString(email, "utf8", "hex");
+		let dbRecord = await Model.createUserRecord(encEmail, encKey);
+		console.log(`User added. New key is: ${newKey}, database id is: ${dbRecord}`)
+		if(dbRecord) {
+			key = newKey;
+		}
+	}
+	catch(e) {
+		console.log("Error adding user: ", error);
+	}
+
+	return key;
+}
+
 module.exports = {
-	validateKey
+	validateKey,
+	addUser
 }
