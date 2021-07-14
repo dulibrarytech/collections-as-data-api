@@ -201,6 +201,7 @@ var CadApiForm = (function() {
 					document.getElementById("api-key-feedback").style.display = "block";
 					document.getElementById("api-key").disabled = true;
 					document.getElementById("api-key-set").disabled = true;
+					document.getElementById("api-key").style.color = "grey";
 				}
 				else {
 					console.log("Invalid key");
