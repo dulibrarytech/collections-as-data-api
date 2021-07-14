@@ -5,11 +5,11 @@ const es = require('../config/index'),
       nodemailer = require('nodemailer'),
       templates = require("./templates/download.js");
 
-exports.validateKey = function(key) {
+exports.validateMasterKey = function(key) {
 	return key == config.apiKey ? true : false;
 }
 
-exports.getKey = function() {
+exports.getMasterKey = function() {
 	let key = config.apiKey || "";
 	return key.length > 0 ? key : null;
 }

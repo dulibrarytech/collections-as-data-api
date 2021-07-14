@@ -167,11 +167,15 @@ var CadApiForm = (function() {
 				}
 				else if(response) {
 					console.log("Request for API key sent successfully");
+					document.getElementById("email").value = "Request for API key sent successfully";
+					console.log(response);
 				}
 				else {
+					document.getElementById("email").style.color = "red";
+					document.getElementById("email").value = "We're sorry, but an error has occurred";
 					console.log("Error sending API key notification email")
 				}
-			}, {email: address});
+			}, {});
 		}
 		else {
 			document.getElementById("email").style.color = "red";
@@ -290,7 +294,6 @@ var CadApiForm = (function() {
 				refreshQueryDisplay();
 			}
 		}	
-			console.log("TEST cache", cache.itemId)
 		displayTemplate(endpointId);
 	}
 

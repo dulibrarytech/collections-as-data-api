@@ -4,8 +4,8 @@ const config = require('../config/config'),
 	  Service = require('./service'),
 	  UserService = require('../user/service.js')
 
-exports.validateKey = function(req, res) {
-	let isValid = Service.validateKey(req.query.key || "");
+exports.validateKey = async function(req, res) {
+	let isValid = await UserService.validateKey(req.query.key || "");
 	res.send({isValid:isValid})
 }
 
