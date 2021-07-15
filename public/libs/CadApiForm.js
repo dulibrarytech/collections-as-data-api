@@ -341,7 +341,13 @@ var CadApiForm = (function() {
 							} 
 						}
 
-						container.appendChild(list);
+						if(list.children.length == 0) {
+							container.innerHTML = `We're sorry, no items were found with ${param.required_field} data`;
+						}
+						else {
+							container.appendChild(list);
+						}
+
 						formGroup.appendChild(container);
 						document.getElementById("param-options").appendChild(formGroup);
 					}
