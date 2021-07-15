@@ -342,7 +342,9 @@ var CadApiForm = (function() {
 						}
 
 						if(list.children.length == 0) {
-							container.innerHTML = `We're sorry, no items were found with ${param.required_field} data`;
+							let message = `We're sorry, no items were found in this collection with ${param.required_field} data`;
+							container.setAttribute("title", message)
+							container.innerHTML = message;
 						}
 						else {
 							container.appendChild(list);
