@@ -18,7 +18,7 @@ var config = require("../config/config.js"),
 
 exports.validateKey = async function(req, res, next) {
     if(req.query.key) {
-    	if(await Service.validateKey(req.query.key) !== false) {
+    	if(await Service.validateKey(req.query.key, req) !== false) {
     		next();
     	}
     	else {

@@ -17,16 +17,16 @@ var config = require("../config/config.js"),
 	Model = require("./model"),
 	Keys = require("../libs/keys.js");
 
-var validateKey = async function(key) {
+var validateKey = async function(key, req=null) {
 	let isValid = false;
-
 	if(key.length % 2 == 0) {
 		try {
 			let encKey = Keys.encryptString(key, "hex", "hex"),
 					userId = await Model.findUserByKey(encKey);
 
 			if(userId) {
-				console.log("User access:", Keys.decryptString(userId, "hex", "utf8"));
+				let route = req ? req.originalUrl.substring(0,req.originalUrl.indexOf("?")) : "route unavailable";
+				console.log("User access:", Keys.decryptString(userId, "hex", "utf8"), "Route:", route);
 				isValid = true;
 			}
 		}
