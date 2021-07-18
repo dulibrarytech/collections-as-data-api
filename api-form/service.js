@@ -22,7 +22,7 @@ exports.sendApiKeyEmail = function(address, key, callback) {
 
 	var message = "Api key: " + key;
 	var mailOptions = {
-		from: 'donotreply@example.com',
+		from: 'University of Denver Collections as Data API',
 		to: address,
 		subject: 'Collections as Data API key request',
 		text: message
