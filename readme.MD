@@ -25,3 +25,7 @@ ELASTICSEARCH_INDEX_TYPE={ex. data}
 DISCOVERY_APPLICATION_DOMAIN={url of digital collections@du}
 MAIL_SERVER={local mail server}
 MAIL_SERVER_PORT=
+DATABASE_HOST={localhost}
+DATABASE_USER={db username}
+DATABASE_PWD={db pwd}
+DATABASE_NAME={db name}
