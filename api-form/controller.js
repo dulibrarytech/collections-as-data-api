@@ -9,12 +9,12 @@ exports.validateKey = async function(req, res) {
 	res.send({isValid:isValid})
 }
 
-exports.requestApiKey = function(req, res) {
+exports.requestApiKey = async function(req, res) {
 	let email = req.body.email || "",
 		response = false;
 
 	if(email.match(/^([a-zA-Z0-9_\-\.]+)@([a-zA-Z0-9_\-\.]+)\.([a-zA-Z]{2,5})$/gm)) {
-		let apikey = UserService.addUser(email);
+		let apikey = await UserService.addUser(email);
 		if(apikey) {
 			Service.sendApiKeyEmail(email, apikey, function(error, response) {
 				if(error) { 
