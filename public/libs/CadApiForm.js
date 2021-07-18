@@ -151,9 +151,10 @@ var CadApiForm = (function() {
 			url = config.apiDomain + "/form/requestKey";
 
 		if(address.match(/^([a-zA-Z0-9_\-\.]+)@([a-zA-Z0-9_\-\.]+)\.([a-zA-Z]{2,5})$/gm)) {
+			document.getElementById("email").style.color = "green";
+			document.getElementById("email").value = "Request for API key sent.";
+			console.log("Sending request for api key");
 			ajaxRequest("post", url, function(error, status, response) {
-				document.getElementById("email").style.color = "green";
-				document.getElementById("email").value = "Request for API key sent.";
 				setTimeout(function() { 
 					document.getElementById("email").style.color = "inherit";
 					document.getElementById("email").value = "";
@@ -165,7 +166,7 @@ var CadApiForm = (function() {
 					document.getElementById("email").value = "Error";
 					console.log("Error requesting API key:", error);
 				}
-				else if(response) {
+				else if(status == 200) {
 					console.log("Request for API key sent successfully");
 					document.getElementById("email").value = "Request for API key sent successfully";
 					console.log(response);
@@ -173,9 +174,9 @@ var CadApiForm = (function() {
 				else {
 					document.getElementById("email").style.color = "red";
 					document.getElementById("email").value = "We're sorry, but an error has occurred";
-					console.log("Error sending API key notification email")
+					console.log("Error requesting API key, server returned status", status);
 				}
-			}, {});
+			}, {"email": address});
 		}
 		else {
 			document.getElementById("email").style.color = "red";
@@ -411,19 +412,17 @@ var CadApiForm = (function() {
 	ajaxRequest = function(type, url, callback, body=null) {
 		var xhttp = new XMLHttpRequest();
 		xhttp.onreadystatechange = function() {
-		    if (this.readyState == 4 && this.status == 200) {		      
-		       callback(null, 200, xhttp.responseText);
-		    }
-		    else {
-		    	let message = "Server responded with status " + this.status + ", ready state " + this.readyState;
-		    	callback(message, this.status, null)
+				if(this.readyState == 2) {
+					console.log("Server received request");
+				}
+		    else if(this.readyState == 4) {	
+		    	console.log("Client received response");	      
+		      callback(null, this.status, xhttp.responseText);
 		    }
 		};
 
 		if(type.toLowerCase() == "post") {
-			let param = url.substring(url.indexOf("?")+1).split("="),
-				data = {};
-
+			let data = {};
 			if(body) {
 				data = body;
 			}
