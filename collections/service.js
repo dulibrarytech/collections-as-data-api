@@ -163,7 +163,7 @@ exports.getCollectionList = function() {
 exports.getItemData = function(collectionID, itemID) {
 	return new Promise(function(fulfill, reject) {
 		fetchCollection(collectionID, function(error, response) {
-			if(response.hits.total > 0) {
+			if(response.hits.total.value > 0) {
 				queryIndex({
 		      		body: {
 		      			query: {
@@ -209,7 +209,7 @@ exports.getItemData = function(collectionID, itemID) {
 exports.getItemTranscript = function(collectionID, itemID) {
 	return new Promise(function(fulfill, reject) {
 		fetchCollection(collectionID, function(error, response) {
-			if(response.hits.total > 0) {
+			if(response.hits.total.value > 0) {
 				queryIndex({
 		      		body: {
 		      			query: {

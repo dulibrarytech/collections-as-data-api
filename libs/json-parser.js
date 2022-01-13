@@ -33,16 +33,9 @@ exports.getItemMetadataValues = function(map, item, data = {}) {
 		values = [],
 		pathArray;
 
-	//console.log("TEST mf", metadataFields)
-
 	for(var key in metadataFields) {
-
-		// if key is array of paths, iterate that here
-
 		values = [];
 		pathArray = metadataFields[key].path.split(".") || [];
-			//console.log("TEST path array", typeof pathArray)
-
 		extractValues(pathArray, displayRecord, metadataFields[key].matchField || null, metadataFields[key].matchValue || null, metadataFields[key].excludeField || null, metadataFields[key].excludeValue || null, metadataFields[key].condition || "true", values);
 		if(values.length > 0) {
 			data[key] = values;

@@ -70,36 +70,35 @@ exports.getObjectArray = async function(callback) {
 		for(var collection of list) {
 			console.log("Fetching data for collection", collection.title);
 			response = await es.search({
-	      index: config.elasticIndex,
-	      type: "data",
-	      body: {
-	      	size: 10000,
-	        query: {
-	          "bool": {
-	            "must": [
-	            	{"match": {"is_member_of_collection": collection.id}},
-	              {"match": {"object_type": "object"}}
-	            ]
-	          }
-	        }
-	      }
-		  });
+			      index: config.elasticIndex,
+			      type: config.indexType,
+			      body: {
+			      	size: 10000,
+			        query: {
+			          "bool": {
+			            "must": [
+			            	{"match": {"is_member_of_collection": collection.id}},
+			              {"match": {"object_type": "object"}}
+			            ]
+			          }
+			        }
+			      }
+			  });
+		  	if(response.hits.total.value > 0) {
 
-	  	if(response.hits.total > 0) {
+		      	let objects = response.hits.hits,
+		      		collectionObjects = [];
 
-      	let objects = response.hits.hits,
-      			collectionObjects = [];
-
-      	for(var object of objects) {
-      			object._source["collection_title"] = collectionTitles[object._source.is_member_of_collection] || "No collection title";
-      			collectionObjects.push(object);
-      	}
-      	console.log(collectionObjects.length + " objects found");
-      	collections.push(collectionObjects);
-      }
-      else {
-      	console.log("No items found in collection")
-      }
+		      	for(var object of objects) {
+		      			object._source["collection_title"] = collectionTitles[object._source.is_member_of_collection] || "No collection title";
+		      			collectionObjects.push(object);
+		      	}
+		      	console.log(collectionObjects.length + " objects found");
+		      	collections.push(collectionObjects);
+		    }
+		    else {
+		      	console.log("No items found in collection")
+		    }
 		}
 
 		createDataObject(collections, callback);
