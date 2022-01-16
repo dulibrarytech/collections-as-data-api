@@ -62,17 +62,25 @@ var CadApiForm = (function() {
 
 	displayTemplate = function(endpointId) {
 		let templates = config.apiFormEndpoints[endpointId].templates || {}, url;
-		for(var key in templates) {
-			document.getElementById(key + "-display").innerHTML = "";
-			url = config.apiDomain + "/template/" + templates[key] + "?key=" + apiKey;
-			ajaxRequest("get", url, function(error, status, response) {
-				if(error) {
-					console.log(error);
-				}
-				else {
-					document.getElementById(key + "-display").innerHTML = renderTemplate(response, cache);
-				}
-			});
+		if(Object.keys(templates).length == 0) {
+			let codeDisplays = document.querySelectorAll(".code-display");
+			for(var display of codeDisplays) {
+				display.innerText = "Code is not available for this request";
+			}
+		}
+		else {
+			for(var key in templates) {
+				document.getElementById(key + "-display").innerHTML = "";
+				url = config.apiDomain + "/template/" + templates[key] + "?key=" + apiKey;
+				ajaxRequest("get", url, function(error, status, response) {
+					if(error) {
+						console.log(error);
+					}
+					else {
+						document.getElementById(key + "-display").innerHTML = renderTemplate(response, cache);
+					}
+				});
+			}
 		} 
 	}
 
