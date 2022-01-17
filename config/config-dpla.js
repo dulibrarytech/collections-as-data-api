@@ -7,7 +7,7 @@ module.exports = {
 	/*
 	 * Number of collections to fetch, -1 for all collections 
 	 */
-	maxCollections: -1,
+	maxCollections: 2,
 
 	/*
 	 * Index fields to display in the data for each bject
@@ -23,6 +23,13 @@ module.exports = {
 	            "matchField": "label",
 	            "matchValue": "creation"
 	        },
+	        "rights": {
+                "path": "display_record.notes.content",
+                "matchField": "type",
+                "matchValue": "userestrict",
+                "display": "text",
+                "default": "Copyright restrictions may apply. User is responsible for all copyright compliance."
+            },
 	        "description": {
 	            "path": "display_record.notes.content",
 	            "matchField": "type",

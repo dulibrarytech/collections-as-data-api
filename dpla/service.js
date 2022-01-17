@@ -14,25 +14,36 @@ var createDataObject = function(collectionObjects, callback) {
 			object = item._source || {};
 			fields = {};
 
-			// Fields not in configuration (built-in)
+			// Add static fields
 			fields["dataProvider"] = "University of Denver";
 			fields["isShownAt"] = config.objectAccessDomain + config.objectAccessPath + "/" + (object.pid || "null") + config.objectAccessParams;
-			fields["rights"] = "Copyright restrictions may apply. User is responsible for all copyright compliance.";
+			//fields["rights"] = "Copyright restrictions may apply. User is responsible for all copyright compliance.";
 			fields["preview"] = config.thumbnailAccessDomain + config.thumbnailAccessPath + "/" + (object.pid || "null") + config.thumbnailAccessParams;
 			fields["collectionTitle"] = object.collection_title;
 			fields["collectionUrl"] = config.objectAccessDomain + config.objectAccessPath + "/" + (object.is_member_of_collection || "null") + config.objectAccessParams;
 			fields["iiifManifest"] = config.iiifAccessDomain + config.iiifAccessPath + "/" + (object.pid || "null") + config.iiifAccessParams;
 
-			// Index fields (in configuration)
+			// Aaa assigned fields
 			var data = {};
-			JsonParser.getItemMetadataValues(dplaConfig.itemMetadataFields["default"], object, data);
+			let displayFields = dplaConfig.itemMetadataFields["default"];
+			JsonParser.getItemMetadataValues(displayFields, object, data);
 
-			for(var key in data) {
-				if(dplaConfig.itemMetadataFields["default"][key].display == "text" && typeof data[key] == "object") {
-					fields[key] = data[key].toString();
+			for(var key in displayFields) {
+				// If the assigned field is not present in the data, use the default value if it is present. Else, omit the field from the response
+				if(typeof data[key] == 'undefined') {
+					if(typeof displayFields[key].default != 'undefined') {
+						fields[key] = displayFields[key].default;
+					}
 				}
 				else {
-					fields[key] = data[key];
+					// Convert the value to text
+					if(dplaConfig.itemMetadataFields["default"][key].display == "text" && typeof data[key] == "object") {
+						fields[key] = data[key].toString();
+					}
+					// Display the value as-is
+					else {
+						fields[key] = data[key];
+					}
 				}
 			}
 
