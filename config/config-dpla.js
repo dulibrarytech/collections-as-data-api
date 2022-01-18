@@ -7,7 +7,7 @@ module.exports = {
 	/*
 	 * Number of collections to fetch, -1 for all collections 
 	 */
-	maxCollections: 2,
+	maxCollections: 10000,
 
 	/*
 	 * Index fields to display in the data for each bject
@@ -28,7 +28,7 @@ module.exports = {
                 "matchField": "type",
                 "matchValue": "userestrict",
                 "display": "text",
-                "default": "Copyright restrictions may apply. User is responsible for all copyright compliance."
+                "default": 'Copyright not evaluated: The copyright and related rights status of this Item has not been evaluated. Please refer to the organization that has made the Item available for more information. You are free to use this Item in any way that is permitted by the copyright and related rights legislation that applies to your use. See: https://rightsstatements.org/page/CNE/1.0/?language=en"'
             },
 	        "description": {
 	            "path": "display_record.notes.content",

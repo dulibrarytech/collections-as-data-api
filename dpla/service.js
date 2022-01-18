@@ -30,6 +30,7 @@ var createDataObject = function(collectionObjects, callback) {
 
 			for(var key in displayFields) {
 				// If the assigned field is not present in the data, use the default value if it is present. Else, omit the field from the response
+				// TODO if multiple fields, iterate array at data[key]
 				if(typeof data[key] == 'undefined') {
 					if(typeof displayFields[key].default != 'undefined') {
 						fields[key] = displayFields[key].default;
