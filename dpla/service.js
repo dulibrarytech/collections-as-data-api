@@ -17,7 +17,6 @@ var createDataObject = function(collectionObjects, callback) {
 			// Add static fields
 			fields["dataProvider"] = "University of Denver";
 			fields["isShownAt"] = config.objectAccessDomain + config.objectAccessPath + "/" + (object.pid || "null") + config.objectAccessParams;
-			//fields["rights"] = "Copyright restrictions may apply. User is responsible for all copyright compliance.";
 			fields["preview"] = config.thumbnailAccessDomain + config.thumbnailAccessPath + "/" + (object.pid || "null") + config.thumbnailAccessParams;
 			fields["collectionTitle"] = object.collection_title;
 			fields["collectionUrl"] = config.objectAccessDomain + config.objectAccessPath + "/" + (object.is_member_of_collection || "null") + config.objectAccessParams;
