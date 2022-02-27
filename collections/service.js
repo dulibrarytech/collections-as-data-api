@@ -75,7 +75,7 @@ exports.getCollectionData = function(collectionID) {
 exports.getCollectionItems = function(collectionID) {
 	return new Promise(function(fulfill, reject) {
 		queryIndex({
-      		_source: ["pid", "title", "type", "mime_type", "object_type", "transcript"],
+      		_source: ["pid", "title", "type", "mime_type", "object_type", "transcript", "transcript_search"],
       		body: {
       			query: {
       				bool: {
@@ -103,7 +103,7 @@ exports.getCollectionItems = function(collectionID) {
 								object_type: item._source.object_type || "undefined",
 								mime_type: item._source.mime_type || "",
 								title: item._source.title || "No title",
-								transcript: item._source.transcript ? true : false
+								transcript: (item._source.transcript || item._source.transcript_search) ? true : false
 							})
 						}
 						fulfill(list);
@@ -233,11 +233,9 @@ exports.getItemTranscript = function(collectionID, itemID) {
 								let item = response.hits.hits[0]._source || {},
 									transcript = "";
 
-								// Determine if compound object.
-								// If so build transcript text block, either undenoted pages or denoted. Final out is single string in "transcript" 
-
-								if(item.transcript) {
-									transcript = item.transcript;
+								// TODO If compound object transcript is to be delimited by page markers, build the transcript string from individual parts IF object is compound
+								if(item.transcript || item.transcript_search) {
+									transcript = item.transcript || item.transcript_search;
 								}
 
 								fulfill(transcript);
