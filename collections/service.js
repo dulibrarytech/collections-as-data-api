@@ -232,9 +232,14 @@ exports.getItemTranscript = function(collectionID, itemID) {
 							if(response.hits.hits && response.hits.hits.length > 0) {
 								let item = response.hits.hits[0]._source || {},
 									transcript = "";
+
+								// Determine if compound object.
+								// If so build transcript text block, either undenoted pages or denoted. Final out is single string in "transcript" 
+
 								if(item.transcript) {
 									transcript = item.transcript;
 								}
+
 								fulfill(transcript);
 							}
 							else {

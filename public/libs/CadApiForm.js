@@ -117,11 +117,12 @@ var CadApiForm = (function() {
 
 		document.getElementById("query-response-display").value = "";
 
-		// Loop urls, fetch
+		// Loop urls, fetch the object data. Add the object data to the data display
 		let endchar = "", paramData;
-		for(var url of urls) {
-			url += "?key=" + apiKey;
-			ajaxRequest("get", url, function(error, status, response) {
+		for(var index=0; index < urls.length; index++) {
+			urls[index] += "?key=" + apiKey;
+
+			ajaxRequest("get", urls[index], function(error, status, response) {
 				if(error && status != 0) {
 					console.log(error);
 					document.getElementById("query-response-display").value = ("HTTP Status: " + status + "\nError: " + error);
@@ -133,21 +134,25 @@ var CadApiForm = (function() {
 					let responseObject = JSON.parse(response),
 			       		data = responseObject.data || {};
 
-			       	// Insert multiple response objects into a JSON array structure in the output display
-			       	let displayData = document.getElementById("query-response-display").value;
+			       	//let dataDisplayArray = document.getElementById("query-response-display").value;
 			       	if(cache[cache.currentParam] && typeof cache[cache.currentParam] == "object") {
-			       		// This is a multi request output. Display output data in a JSON array. Prepend a '[' to the first data output, append a ',' to delimit the response objects, append a ']' to the last response received
-				       	if(displayData.length == 0) {
+
+			       		// This is the first object in the set, add the opening array bracket to the display
+				       	if(index == 0) {
 				       		document.getElementById("query-response-display").value = "[";
 				       	}
-				       	// If the number of delimiters is equal to the number of params currently selected, this is the last response object to be added to the display.
-				       	if(displayData.indexOf(",\n\n") >= 0 && displayData.match(/\n\n/g).length == cache[cache.currentParam].length-1) {
-				       		endchar = "]";
-				       	}	
+
+				       	// There will be another object in the next iteration. append comma to delimit the ext array element
+				       	if(urls.length > 1 && (index+1) < urls.length) {
+				       		endchar = ",\n";
+				       	}
+				       	// This is the last object to add to the display. append the closing array bracket
 				       	else {
-				       		endchar = ",\n\n";
+				       		endchar = "]";
 				       	}
 			       	}
+
+			       	// Add the current object to the display, append the comma delimiter or the closing bracket
 			       	document.getElementById("query-response-display").value += (JSON.stringify(data, undefined, 4)) + endchar;
 				}
 			});
