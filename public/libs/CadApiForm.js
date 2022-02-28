@@ -144,7 +144,7 @@ var CadApiForm = (function() {
 
 				       	// There will be another object in the next iteration. append comma to delimit the ext array element
 				       	if(urls.length > 1 && (index+1) < urls.length) {
-				       		endchar = ",\n";
+				       		endchar = ",\n\n";
 				       	}
 				       	// This is the last object to add to the display. append the closing array bracket
 				       	else {
