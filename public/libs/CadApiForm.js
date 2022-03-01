@@ -79,6 +79,9 @@ var CadApiForm = (function() {
 					}
 					else {
 						document.getElementById(key + "-display").innerHTML = renderTemplate(response, cache);
+
+						// Show the copy text button
+						document.getElementById(key + "-display").nextElementSibling.style.display = "block";
 					}
 				});
 			}
@@ -94,6 +97,9 @@ var CadApiForm = (function() {
 		let endpoint = config.apiFormEndpoints[endpointId];
 		document.getElementById("endpoint-select").value = endpointId;
 		document.getElementById("query-display").value = config.apiDomain + endpoint.uri;
+
+		// Show the copy text button
+		document.getElementById("query-display").nextElementSibling.style.display = "block";
 
 		// Display the first parameter select box
 		if(endpoint.params && endpoint.params.length > 0) {
@@ -134,7 +140,10 @@ var CadApiForm = (function() {
 					let responseObject = JSON.parse(response),
 			       	data = responseObject.data || {};
 
+			       	// Show the copy text button
 			       	document.getElementById("query-response-display").nextElementSibling.style.display = "block";
+
+			       	// Display the data objects in an array
 			       	if(cache[cache.currentParam] && typeof cache[cache.currentParam] == "object") {
 
 			       		// This is the first object in the set, add the opening array bracket to the display
