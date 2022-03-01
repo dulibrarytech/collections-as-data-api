@@ -52,6 +52,25 @@
 	background-color: #ffffff;
 }
 
+.copy-text-link {
+    display:  none;
+    align-self: baseline;
+}
+
+.copy-text-link:hover {
+    cursor:  pointer;
+}
+
+.copy-click::after {
+    font-family: FontAwesome;
+    content: "\f00c";
+    font-size: 20px;
+    color: green;
+    pointer-events: none;
+    margin-left: 18px;
+    /*font-size:  1.2em;*/
+}
+
 #param-options ul {
     margin-bottom:  0;
 }

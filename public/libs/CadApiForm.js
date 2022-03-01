@@ -12,6 +12,7 @@ var CadApiForm = (function() {
 	var onCheckParam;
 
 	var ajaxRequest;
+	var clearResponseDisplay;
 	var resetDisplays;
 	var resetForm;
 	var refreshQueryDisplay;
@@ -106,6 +107,7 @@ var CadApiForm = (function() {
 	}
 
 	submitGetRequest = function() {
+		clearResponseDisplay();
 		let uris = document.getElementById("query-display").value.split("\n\n"), 
 			urls = [];
 
@@ -114,8 +116,6 @@ var CadApiForm = (function() {
 				urls.push(uri);
 			}
 		}
-
-		document.getElementById("query-response-display").value = "";
 
 		// Loop urls, fetch the object data. Add the object data to the data display
 		let endchar = "", paramData;
@@ -132,9 +132,9 @@ var CadApiForm = (function() {
 				}
 				else if(response) {
 					let responseObject = JSON.parse(response),
-			       		data = responseObject.data || {};
+			       	data = responseObject.data || {};
 
-			       	//let dataDisplayArray = document.getElementById("query-response-display").value;
+			       	document.getElementById("query-response-display").nextElementSibling.style.display = "block";
 			       	if(cache[cache.currentParam] && typeof cache[cache.currentParam] == "object") {
 
 			       		// This is the first object in the set, add the opening array bracket to the display
@@ -257,9 +257,9 @@ var CadApiForm = (function() {
 	onSelectParam = function(selectBox) {
 		let paramName = selectBox.id.replace("_select", "")
 		clearDependentParams(selectBox);
-		document.getElementById("query-response-display").value = "";
 		cache[paramName] = selectBox.value;
 		cache.currentParam = paramName;
+		clearResponseDisplay();
 		refreshQueryDisplay();
 
 		// Check for a dependent param
@@ -276,6 +276,7 @@ var CadApiForm = (function() {
 	}
 
 	onCheckParam = function(checkBox) {
+		clearResponseDisplay();
 		let endpointId = document.getElementById("endpoint-select").value,
 			uri = config.apiDomain + config.apiFormEndpoints[endpointId].uri,
 			paramName = checkBox.name;
@@ -283,7 +284,6 @@ var CadApiForm = (function() {
 		cache.currentParam = paramName;
 		uri = uri.replace("{" + paramName + "}", checkBox.value) + "\n\n";
 		uri = getUrlParamValues(uri);
-		document.getElementById("query-response-display").value = "";
 
 		if(checkBox.checked) {
 			if(!cache[paramName] || typeof cache[paramName] == "string") {
@@ -450,12 +450,23 @@ var CadApiForm = (function() {
 		}
 	}
 
+	clearResponseDisplay = function() {
+		document.getElementById("query-response-display").value = "";
+		document.querySelector(".query-response-section .copy-text-link").style.display = "none";
+	}
+
 	resetDisplays = function() {
 		document.getElementById("query-display").value = "";
 		document.getElementById("query-response-display").value = "";
 		document.getElementById("param-options").innerHTML = "";
+
+		var copyButtons = document.getElementsByClassName("copy-text-link");
+		for(var i=0; i<copyButtons.length; i++) {
+			copyButtons[i].style.display = "none";
+		}
+
 		var codeDisplays = document.getElementsByClassName("code-display");
-		for(var i=0; i<codeDisplays.length; i++) {
+		for(i=0; i<codeDisplays.length; i++) {
 			codeDisplays[i].innerHTML = "";
 		}
 	}
