@@ -13,16 +13,21 @@
 
  'use strict'
 const config = require("../config/config.js"),
-	  mysql = require('mysql');
+	    mysql = require('mysql');
 
-var connection = mysql.createConnection({
-  host     : config.databaseHost,
-  user     : config.databaseUser,
-  password : config.databasePassword,
-  database : config.databaseName
-});
-connection.connect();
+var connection;
 
-module.exports = {
-	connection
+exports.getConnection = function() {
+  connection = mysql.createConnection({
+    host     : config.databaseHost,
+    user     : config.databaseUser,
+    password : config.databasePassword,
+    database : config.databaseName
+  });
+  connection.connect();
+  return connection;
+}
+
+exports.endConnection = function(connection) {
+  connection.end();
 }

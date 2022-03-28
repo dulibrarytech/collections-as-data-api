@@ -14,42 +14,48 @@
  'use strict'
 
 const config = require("../config/config.js"),
-	db = require("../libs/database.js").connection;
+	  mysql = require("../libs/database.js");
+
+var db;
 	
 var findUserByKey = async function(key) {
 	return new Promise(function(fulfill, reject) {
+		db = mysql.getConnection();
 		db.query(`SELECT user_id FROM users AS id WHERE api_key='${key}'`, function (error, results, fields) {
-	  	if (error) {
-	  		console.log(`Mysql error: ${error}`);
-	  		fulfill(null);
-	  	}
-	  	else {
-	  		if(results.length > 0) {
-	  			fulfill(results[0].user_id);
-	  		}
-	  		else {
-	  			fulfill(null);
-	  		}
-	  	}
+		  	if (error) {
+		  		console.log(`Mysql error: ${error}`);
+		  		fulfill(null);
+		  	}
+		  	else {
+		  		if(results.length > 0) {
+		  			fulfill(results[0].user_id);
+		  		}
+		  		else {
+		  			fulfill(null);
+		  		}
+		  	}
+		  	mysql.endConnection(db);
 		});
 	});
 }
 
 var createUserRecord = async function(email, key) {
 	return new Promise(function(fulfill, reject) {
+		db = mysql.getConnection();
 		db.query(`INSERT INTO users (user_id, api_key) VALUES ('${email}', '${key}')`, function (error, results, fields) {
-	  	if (error) {
-	  		console.log(`Mysql error: ${error}`);
-	  		fulfill(null);
-	  	}
-	  	else {
-	  		if(results.insertId) {
-	  			fulfill(results.insertId);
-	  		}
-	  		else {
-	  			fulfill(null);
-	  		}
-	  	}
+		  	if (error) {
+		  		console.log(`Mysql error: ${error}`);
+		  		fulfill(null);
+		  	}
+		  	else {
+		  		if(results.insertId) {
+		  			fulfill(results.insertId);
+		  		}
+		  		else {
+		  			fulfill(null);
+		  		}
+		  	}
+		  	mysql.endConnection(db);
 		});
 	});
 }

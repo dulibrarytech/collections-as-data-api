@@ -25,7 +25,7 @@ module.exports = function () {
             res.sendStatus(403);
     });
 
-    require('../libs/database.js');
+    //require('../libs/database.js');
 
     require('../dpla/routes.js')(app);
     require('../api-form/routes.js')(app);
