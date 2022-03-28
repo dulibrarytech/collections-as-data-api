@@ -1,6 +1,6 @@
 'use strict'
 
-var CadApiForm = (function() {
+const CadApiForm = (function() {
 		
 	var initForm;
 	var onCheckTerms;
@@ -22,6 +22,7 @@ var CadApiForm = (function() {
 	var getUrlParamValues;
 	var displayTemplate;
 	var renderTemplate;
+	var enableTermsAcknowledgementCheckbox;
 
 	var config;
 	var cache;
@@ -52,12 +53,17 @@ var CadApiForm = (function() {
 			document.getElementById("endpoint-select").classList.remove("disabled");
 			document.getElementById("get-submit").classList.remove("disabled");
 			document.getElementById("query-display").classList.remove("disabled");
+
+			// Disable uncheck terms once checked (remove else block)
+			document.getElementById("terms-check").classList.add("disabled");
 		}
 		else {
-			document.getElementById("endpoint-select").classList.add("disabled");
-			document.getElementById("get-submit").classList.add("disabled");
-			document.getElementById("query-display").classList.add("disabled");
-			resetForm();
+			// Allow uncheck terms agree once checked
+			// document.getElementById("endpoint-select").classList.add("disabled");
+			// document.getElementById("get-submit").classList.add("disabled");
+			// document.getElementById("query-display").classList.add("disabled");
+			// resetDisplays();
+			// resetForm();
 		}
 	}
 
@@ -491,6 +497,10 @@ var CadApiForm = (function() {
 		document.getElementById("query-display").value = getUrlParamValues(uri);
 	}
 
+	enableTermsAcknowledgementCheckbox = function() {
+		document.getElementById("terms-check").disabled = false;
+	}
+
 	return {
 		initForm: function(configObject) {
 			initForm(configObject);
@@ -518,6 +528,9 @@ var CadApiForm = (function() {
 		},
 		onCheckParam: function(checkBox) {
 			onCheckParam(checkBox);
+		},
+		enableTermsAcknowledgementCheckbox: function() {
+			enableTermsAcknowledgementCheckbox();
 		}
 	}
 })()
