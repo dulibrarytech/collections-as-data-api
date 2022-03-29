@@ -3,6 +3,8 @@
  */
 
 window.addEventListener('load', (event) => {
+
+	// Add a click event to the "copy text" links, to copy the specified text to clipboard
 	let links = document.querySelectorAll(".copy-text-link");
 	for(var i=0; i<links.length; i++) {
 		links[i].addEventListener('click', function(event) {
@@ -24,7 +26,6 @@ window.addEventListener('load', (event) => {
 				currentLink.firstChild.style.display = "block";
 				currentLink.classList.remove("copy-click")
 			}, 1500);
-
 		});
 	}
 });

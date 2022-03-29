@@ -231,10 +231,27 @@ exports.getItemTranscript = function(collectionID, itemID) {
 						try {
 							if(response.hits.hits && response.hits.hits.length > 0) {
 								let item = response.hits.hits[0]._source || {},
-									transcript = "";
+										transcript = "";
 
-								// TODO If compound object transcript is to be delimited by page markers, build the transcript string from individual parts IF object is compound
-								if(item.transcript || item.transcript_search) {
+								if(item.is_compound == true) {
+									let parts = item.display_record.parts || [],
+											order;
+
+									for(var part of parts) {
+										order = part.order || "";
+										if(part.transcript) {
+											transcript = transcript.concat(` [Page ${order}] `, part.transcript)
+										}
+										else {
+											transcript = transcript.concat(` [Page ${order}] `, "Transcript not available for this page")
+										}
+									}
+
+									if(transcript.length == 0) {
+										transcript = "Transcript not found";
+									}
+								}
+								else {
 									transcript = item.transcript || item.transcript_search;
 								}
 

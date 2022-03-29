@@ -169,6 +169,8 @@ const CadApiForm = (function() {
 
 			       	// Add the current object to the display, append the comma delimiter or the closing bracket
 			       	document.getElementById("query-response-display").value += (JSON.stringify(data, undefined, 4)) + endchar;
+
+			       	console.log("TEST json data", JSON.stringify(data, undefined, 4))
 				}
 			});
 		}
