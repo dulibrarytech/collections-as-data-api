@@ -237,15 +237,17 @@ exports.getItemTranscript = function(collectionID, itemID) {
 									let parts = item.display_record.parts || [],
 											order;
 
+									transcript += "\"";
 									for(var part of parts) {
 										order = part.order || "";
 										if(part.transcript) {
-											transcript = transcript.concat(` [Page ${order}] `, part.transcript)
+											transcript = transcript.concat(`\n[Page ${order}]\n`, part.transcript)
 										}
 										else {
-											transcript = transcript.concat(` [Page ${order}] `, "Transcript not available for this page")
+											transcript = transcript.concat(`\n[Page ${order}]\n`, "Transcript not available for this page")
 										}
 									}
+									transcript += "\n\"";
 
 									if(transcript.length == 0) {
 										transcript = "Transcript not found";

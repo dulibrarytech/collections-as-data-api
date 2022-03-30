@@ -104,7 +104,6 @@ exports.collectionItemTranscript = function(req, res) {
 			sendErrorResponse(res, error);
 		})
 		.then(response => {
-				console.log("TEST C response:", response)
 			let status, message = "", data = "";
 			if(response === false) {
 				status = 400;

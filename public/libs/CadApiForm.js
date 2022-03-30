@@ -134,7 +134,7 @@ const CadApiForm = (function() {
 		for(var index=0; index < urls.length; index++) {
 			urls[index] += "?key=" + apiKey;
 
-			ajaxRequest("get", urls[index], function(error, status, response) {
+			ajaxRequest("get", urls[index], function(error, status, response, url) {
 				if(error && status != 0) {
 					console.log(error);
 					document.getElementById("query-response-display").value = ("HTTP Status: " + status + "\nError: " + error);
@@ -167,15 +167,20 @@ const CadApiForm = (function() {
 				       	}
 			       	}
 
-			       	// Add the current object to the display, append the comma delimiter or the closing bracket
-			       	document.getElementById("query-response-display").value += (JSON.stringify(data, undefined, 4)) + endchar;
-
-			       	console.log("TEST json data", JSON.stringify(data, undefined, 4))
+			       	if(url.indexOf("/transcript") > 0) {
+			       		// Display the data as a single string, with newline formatting
+						document.getElementById("query-response-display").value += (data + endchar);
+			       	}
+			       	else {
+			       		// Display the data as a formatted json string
+			       		document.getElementById("query-response-display").value += (JSON.stringify(data, undefined, 4)) + endchar;
+			       	}
 				}
 			});
 		}
 	}
 
+	/* email.js */
 	submitEmailAddress = function() {
 		let address = document.getElementById("email").value.substring(0, config.maxEmailChars),
 			url = config.apiDomain + "/form/requestKey";
@@ -214,6 +219,7 @@ const CadApiForm = (function() {
 		}
 	}
 
+	/* api.js */
 	setApiKey = function() {
 		let key = document.getElementById("api-key").value,
 			url = config.apiDomain + "/form/validateKey?key=" + key;
@@ -439,6 +445,7 @@ const CadApiForm = (function() {
 		}
 	}
 
+	/* ajax.js */
 	ajaxRequest = function(type, url, callback, body=null) {
 		var xhttp = new XMLHttpRequest();
 		xhttp.onreadystatechange = function() {
@@ -447,7 +454,7 @@ const CadApiForm = (function() {
 				}
 		    else if(this.readyState == 4) {	
 		    	console.log("Client received response");	      
-		      callback(null, this.status, xhttp.responseText);
+		      callback(null, this.status, xhttp.responseText, url);
 		    }
 		};
 
