@@ -5,3 +5,7 @@ Updated database module to include functions to get and close a connection. Upda
 1.3.21
 
 Updated the transcript endpoint to concatenate the object part transcripts if the object is compound
+
+1.3.3
+
+Updated the formatting of the list items in the collection item list. Aligned the item title text to the right of the checkboxes to prevent the text from appearing under the checkbox if the string wraps horizontally

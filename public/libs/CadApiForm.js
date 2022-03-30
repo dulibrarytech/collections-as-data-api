@@ -357,6 +357,7 @@ const CadApiForm = (function() {
 						container.classList.add("form-control");
 						let list = document.createElement("UL"), listItem, checkbox, label, item;
 						list.setAttribute("id", param.name + "_select");
+						list.setAttribute("class", "item-select");
 
 						// Add the response items
 						for(var index in responseObject.data) {

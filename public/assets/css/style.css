@@ -45,6 +45,20 @@
 	list-style-type: none;
 }
 
+.list-container .item-select {
+    display:  grid;
+}
+
+.list-container .item-select li {
+    display: inline-flex;
+}
+
+.list-container .item-select li input[type="checkbox"] {
+    position: relative;
+    top: 6px;
+    margin-right: 10px;
+}
+
 .code-display {
 	min-height: 370px;
 	font-family: "monospace","Segoe UI",Roboto,"Helvetica Neue",Arial,"Noto Sans",sans-serif;
