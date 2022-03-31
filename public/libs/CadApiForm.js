@@ -10,6 +10,7 @@ const CadApiForm = (function() {
 	var setApiKey;
 	var onSelectParam;
 	var onCheckParam;
+	var onSelectAllItems;
 
 	var ajaxRequest;
 	var clearResponseDisplay;
@@ -351,11 +352,20 @@ const CadApiForm = (function() {
 						map = param.option_map;
 
 					if(param.multi_select) {
+
+						let selectAll = document.createElement("INPUT");
+						selectAll.setAttribute("type", "checkbox");
+						selectAll.setAttribute("onclick", "CadApiForm.onSelectAllItems(this)");
+						let label = document.createElement("LABEL");
+						label.innerHTML = "&nbsp;&nbsp;Select All";
+						formGroup.appendChild(selectAll);
+						formGroup.appendChild(label);
+
 						// Populate with checkboxes (onclick onCheckParam(checkBox))
 						let container = document.createElement("DIV");
 						container.classList.add("list-container");
 						container.classList.add("form-control");
-						let list = document.createElement("UL"), listItem, checkbox, label, item;
+						let list = document.createElement("UL"), listItem, checkbox, item;
 						list.setAttribute("id", param.name + "_select");
 						list.setAttribute("class", "item-select");
 
@@ -420,6 +430,13 @@ const CadApiForm = (function() {
 		}
 	}
 
+	onSelectAllItems = function(optionList) {
+		let items = document.querySelectorAll(".item-select li input[type='checkbox']");
+		for(let index=0; index<items.length; index++) {
+			items[index].click();
+		}
+	}
+
 	getUrlParamValues = function(url) {
 		let params = url.match(/{(.*?)\}/g), paramName;
 		if(params) {
@@ -435,6 +452,8 @@ const CadApiForm = (function() {
 
 	clearDependentParams = function(selectBox) {
 		document.getElementById("query-display").value = getUrlParamValues(document.getElementById("query-display").value);
+
+		// TODO seriously, replace this dom traversal with something readable
 		while(selectBox.parentNode.nextSibling) {
 			if(selectBox.parentNode.nextSibling.firstChild.value && selectBox.parentNode.nextSibling.firstChild.value.length > 0) {
 				let paramName = selectBox.parentNode.nextSibling.firstChild.id.replace("_select", "");
@@ -538,6 +557,9 @@ const CadApiForm = (function() {
 		},
 		onCheckParam: function(checkBox) {
 			onCheckParam(checkBox);
+		},
+		onSelectAllItems: function(checkBox) {
+			onSelectAllItems(checkBox);
 		},
 		enableTermsAcknowledgementCheckbox: function() {
 			enableTermsAcknowledgementCheckbox();

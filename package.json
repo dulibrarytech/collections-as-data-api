@@ -1,6 +1,6 @@
 {
   "name": "collections-as-data-api",
-  "version": "1.3.3",
+  "version": "1.3.31",
   "description": "Proof of concept API for Collections as Data grant project",
   "main": "cad-api.js",
   "scripts": {
