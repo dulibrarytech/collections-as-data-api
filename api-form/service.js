@@ -17,7 +17,9 @@ exports.getMasterKey = function() {
 exports.sendApiKeyEmail = function(address, key, callback) {
 	var transporter = nodemailer.createTransport({
 	  	host: config.mailServer,
-    	port: config.mailServerPort
+    	port: config.mailServerPort,
+		secure: config.mailServerPort == 465, // true for 465, false for other ports
+		ignoreTLS: config.mailServerPort != 465 // false for 465, true for other ports
 	});
 
 	var message = "Api key: " + key;
