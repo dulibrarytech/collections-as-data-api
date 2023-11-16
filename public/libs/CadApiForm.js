@@ -232,7 +232,6 @@ const CadApiForm = (function() {
 			else {
 				response = JSON.parse(response);
 				if(response.isValid) {
-					console.log("Key is valid");
 					apiKey = key;
 					document.getElementById("terms-ack").style.display = "flex";
 					resetForm();
@@ -473,7 +472,6 @@ const CadApiForm = (function() {
 					console.log("Server received request");
 				}
 		    else if(this.readyState == 4) {	
-		    	console.log("Client received response");	      
 		      callback(null, this.status, xhttp.responseText, url);
 		    }
 		};
