@@ -86,7 +86,7 @@ exports.collectionItem =
 	"\titem_metadata_file = open(filename, 'w')" + "\n" +
 	"\t\n" +
 	"\tfor field in item_data['data']:" + "\n" +
-	"\t\tline = field + ': ' + item_data['data'][field]['value'][0] + '" + "\n" +
+	"\t\tline = field + ': ' + item_data['data'][field]['value'][0] + '\n'" + "\n" +
 	"\t\titem_metadata_file.write(line)" + "\n" +
 	"\t\n" +
 	"\titem_metadata_file.close()" + "\n" +
