@@ -38,6 +38,11 @@ module.exports = {
         "Title": {
             "path": "display_record.title"
         },
+        "Identifier": {
+            "path": "display_record.identifiers.identifier",
+            "matchField": "type",
+            "matchValue": "local"
+        },
         "Creator": {
             "path": "display_record.names.title"
         },
@@ -46,16 +51,48 @@ module.exports = {
             "matchField": "label",
             "matchValue": "creation"
         },
+        "Digitization Date": {
+            "path": "display_record.dates.expression",
+            "matchField": "label",
+            "matchValue": "digitization"
+        },
         "Item Type": {
             "path": "type"
+        },
+        "Mime Type": {
+            "path": "mime_type"
         },
         "Description": {
             "path": "display_record.notes.content",
             "matchField": "type",
             "matchValue": "abstract"
         },
+        "Topic": {
+            "path": "display_record.subjects.title"
+        },
+        "Places": {
+            "path": "display_record.subjects.terms.term",
+            "matchField": "type",
+            "matchValue": "geographic"
+        },
+        "Genre/Form": {
+            "path": "display_record.subjects.terms.term",
+            "matchField": "type",
+            "matchValue": "genre_form"
+        },
+        "Extents": {
+            "path":"display_record.extents"
+        },
+        "Notes": {
+            "path": "display_record.notes.content"
+        },
         "Resource URI": {
             "path": "object"
+        },
+        "Copyright": {
+            "path": "display_record.notes.content",
+            "matchField": "type",
+            "matchValue": "userestrict"
         }
     },
 
