@@ -30,7 +30,7 @@ exports.collectionItems =
 	"responseObj = json.loads(response.text)" + "\n" +
 	"items = responseObj['data']" + "\n" +
 	"\nfor item in items:" + "\n" +
-	"\titem_id = item['id']" + "\n" +
+	"\titem_id = item" + "\n" +
 	"\turl = base_url + '/collections/' + collection_id + '/items/' + item_id + '?key=' + api_key" + "\n" +
 	"\tresponse = requests.get(url)" + "\n" +
 	"\titem_data = json.loads(response.text)" + "\n" +
@@ -45,7 +45,7 @@ exports.collectionItems =
 	"\tzipObj.write(filename)" + "\n" +
 
 	"\textension = item_data['data']['Resource URI']['value'][0][-3:]" + "\n" +
-	"\turl = '" + config.repositoryDomain + "/datastream/' + item + '/object/' + item + '.' + extension" + "\n" +
+	"\turl = '" + config.repositoryDomain + "/datastream/' + item_id + '/object/' + item_id + '.' + extension" + "\n" +
 	"\tfilename = item_id + '_resource' + '.' + extension" + "\n" +
 	"\tprint('Downloading file: ' + filename)" + "\n" +
 	"\tstream_to_file(url, filename)" + "\n" +
@@ -78,7 +78,7 @@ exports.collectionItem =
 	"\n" +
 	"items = {itemId}" + "\n" +
 	"\nfor item in items:" + "\n" +
-	"\titem_id = item['id']" + "\n" +
+	"\titem_id = item" + "\n" +
 	"\turl = base_url + '/collections/' + collection_id + '/items/' + item_id + '?key=' + api_key" + "\n" +
 	"\tresponse = requests.get(url)" + "\n" +
 	"\titem_data = json.loads(response.text)" + "\n" +
@@ -93,7 +93,7 @@ exports.collectionItem =
 	"\tzipObj.write(filename)" + "\n" +
 
 	"\textension = item_data['data']['Resource URI']['value'][0][-3:]" + "\n" +
-	"\turl = '" + config.repositoryDomain + "/datastream/' + item + '/object/' + item + '.' + extension" + "\n" +
+	"\turl = '" + config.repositoryDomain + "/datastream/' + item_id + '/object/' + item_id + '.' + extension" + "\n" +
 	"\tfilename = item_id + '_resource' + '.' + extension" + "\n" +
 	"\tprint('Downloading file: ' + filename)" + "\n" +
 	"\tstream_to_file(url, filename)" + "\n" +
@@ -126,7 +126,7 @@ exports.itemTranscript =
 	"\n" +
 	"items = {itemId}" + "\n" +
 	"\nfor item in items:" + "\n" +
-	"\titem_id = item['id']" + "\n" +
+	"\titem_id = item" + "\n" +
 	"\turl = base_url + '/collections/' + collection_id + '/items/' + item_id + 'transcript?key=' + api_key" + "\n" +
 	"\tresponse = requests.get(url)" + "\n" +
 	"\titem_data = json.loads(response.text)" + "\n" +
@@ -141,7 +141,7 @@ exports.itemTranscript =
 	"\tzipObj.write(filename)" + "\n";
 
 	"\textension = item_data['data']['Resource URI']['value'][0][-3:]" + "\n" +
-	"\turl = '" + config.repositoryDomain + "/datastream/' + item + '/object/' + item + '.' + extension" + "\n" +
+	"\turl = '" + config.repositoryDomain + "/datastream/' + item_id + '/object/' + item_id + '.' + extension" + "\n" +
 	"\tfilename = item_id + '_resource' + '.' + extension" + "\n" +
 	"\tprint('Downloading file: ' + filename)" + "\n" +
 	"\tstream_to_file(url, filename)" + "\n" +
