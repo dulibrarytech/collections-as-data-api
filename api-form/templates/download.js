@@ -44,8 +44,8 @@ exports.collectionItems =
 	"\titem_metadata_file.close()" + "\n" +
 	"\tzipObj.write(filename)" + "\n" +
 
-	"\turl = '" + config.discoveryApiDomain + "/datastream/' + item['id'] + '/object/' + item['id] + '.' + extension" + "\n" +
 	"\textension = item_data['data']['Resource URI']['value'][0][-3:]" + "\n" +
+	"\turl = '" + config.repositoryDomain + "/datastream/' + item + '/object/' + item + '.' + extension" + "\n" +
 	"\tfilename = item_id + '_resource' + '.' + extension" + "\n" +
 	"\tprint('Downloading file: ' + filename)" + "\n" +
 	"\tstream_to_file(url, filename)" + "\n" +
@@ -93,7 +93,7 @@ exports.collectionItem =
 	"\tzipObj.write(filename)" + "\n" +
 
 	"\textension = item_data['data']['Resource URI']['value'][0][-3:]" + "\n" +
-	"\turl = '" + config.discoveryApiDomain + "/datastream/' + item['id'] + '/object/' + item['id] + '.' + extension" + "\n" +
+	"\turl = '" + config.repositoryDomain + "/datastream/' + item + '/object/' + item + '.' + extension" + "\n" +
 	"\tfilename = item_id + '_resource' + '.' + extension" + "\n" +
 	"\tprint('Downloading file: ' + filename)" + "\n" +
 	"\tstream_to_file(url, filename)" + "\n" +
@@ -140,8 +140,8 @@ exports.itemTranscript =
 	"\titem_transcript_file.close()" + "\n" +
 	"\tzipObj.write(filename)" + "\n";
 
-	"\turl = '" + config.discoveryApiDomain + "/datastream/' + item['id'] + '/object/' + item['id] + '.' + extension" + "\n" +
 	"\textension = item_data['data']['Resource URI']['value'][0][-3:]" + "\n" +
+	"\turl = '" + config.repositoryDomain + "/datastream/' + item + '/object/' + item + '.' + extension" + "\n" +
 	"\tfilename = item_id + '_resource' + '.' + extension" + "\n" +
 	"\tprint('Downloading file: ' + filename)" + "\n" +
 	"\tstream_to_file(url, filename)" + "\n" +
