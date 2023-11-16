@@ -12,9 +12,9 @@ module.exports = {
     elasticPort: process.env.ELASTICSEARCH_PORT,
     elasticIndex: process.env.ELASTICSEARCH_INDEX,
     indexType: process.env.ELASTICSEARCH_INDEX_TYPE,
-    repositoryDomain: process.env.REPOSITORY_DOMAIN,
+    //repositoryDomain: process.env.REPOSITORY_DOMAIN,
     rootUrl: process.env.PROTOCOL + "://" + process.env.APPLICATION_DOMAIN,
-    discoveryApiDomain: process.env.DISCOVERY_APPLICATION_DOMAIN,
+    repositoryDomain: process.env.REPOSITORY_DOMAIN,
     mailServer: process.env.MAIL_SERVER,
     mailServerPort: process.env.MAIL_SERVER_PORT,
     encryptionKey: process.env.ENCRYPTION_KEY,
@@ -38,7 +38,7 @@ module.exports = {
         "Title": {
             "path": "display_record.title"
         },
-        "Identifier": {
+        "Local Identifier": {
             "path": "display_record.identifiers.identifier",
             "matchField": "type",
             "matchValue": "local"
@@ -87,7 +87,7 @@ module.exports = {
             "path": "display_record.notes.content"
         },
         "Resource URI": {
-            "path": "object"
+            "path": "uri"
         },
         "Copyright": {
             "path": "display_record.notes.content",
