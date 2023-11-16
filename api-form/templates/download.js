@@ -86,14 +86,14 @@ exports.collectionItem =
 	"\titem_metadata_file = open(filename, 'w')" + "\n" +
 	"\t\n" +
 	"\tfor field in item_data['data']:" + "\n" +
-	"\t\tline = field + ': ' + item_data['data'][field]['value'][0] + '\n'" + "\n" +
+	"\t\tline = field + ': ' + item_data['data'][field]['value'][0] + '" + "\n" +
 	"\t\titem_metadata_file.write(line)" + "\n" +
 	"\t\n" +
 	"\titem_metadata_file.close()" + "\n" +
 	"\tzipObj.write(filename)" + "\n" +
 
-	"\turl = '" + config.discoveryApiDomain + "/datastream/' + item['id'] + '/object/' + item['id] + '.' + extension" + "\n" +
 	"\textension = item_data['data']['Resource URI']['value'][0][-3:]" + "\n" +
+	"\turl = '" + config.discoveryApiDomain + "/datastream/' + item['id'] + '/object/' + item['id] + '.' + extension" + "\n" +
 	"\tfilename = item_id + '_resource' + '.' + extension" + "\n" +
 	"\tprint('Downloading file: ' + filename)" + "\n" +
 	"\tstream_to_file(url, filename)" + "\n" +
