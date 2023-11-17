@@ -44,7 +44,7 @@ exports.collectionItems =
 	"\titem_metadata_file.close()" + "\n" +
 	"\tzipObj.write(filename)" + "\n" +
 
-	"\textension = item_data['data']['Resource URI']['value'][0][-3:]" + "\n" +
+	"\textension = item_data['data']['Mime Type']['value'][0][-3:]" + "\n" +
 	"\turl = '" + config.repositoryDomain + "/datastream/' + item_id + '/object/' + item_id + '.' + extension" + "\n" +
 	"\tfilename = item_id + '_resource' + '.' + extension" + "\n" +
 	"\tprint('Downloading file: ' + filename)" + "\n" +
@@ -92,7 +92,7 @@ exports.collectionItem =
 	"\titem_metadata_file.close()" + "\n" +
 	"\tzipObj.write(filename)" + "\n" +
 
-	"\textension = item_data['data']['Resource URI']['value'][0][-3:]" + "\n" +
+	"\textension = item_data['data']['Mime Type']['value'][0][-3:]" + "\n" +
 	"\turl = '" + config.repositoryDomain + "/datastream/' + item_id + '/object/' + item_id + '.' + extension" + "\n" +
 	"\tfilename = item_id + '_resource' + '.' + extension" + "\n" +
 	"\tprint('Downloading file: ' + filename)" + "\n" +
@@ -140,7 +140,7 @@ exports.itemTranscript =
 	"\titem_transcript_file.close()" + "\n" +
 	"\tzipObj.write(filename)" + "\n";
 
-	"\textension = item_data['data']['Resource URI']['value'][0][-3:]" + "\n" +
+	"\textension = item_data['data']['Mime Type']['value'][0][-3:]" + "\n" +
 	"\turl = '" + config.repositoryDomain + "/datastream/' + item_id + '/object/' + item_id + '.' + extension" + "\n" +
 	"\tfilename = item_id + '_resource' + '.' + extension" + "\n" +
 	"\tprint('Downloading file: ' + filename)" + "\n" +
