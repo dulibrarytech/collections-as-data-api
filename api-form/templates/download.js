@@ -17,7 +17,7 @@ exports.collectionItems =
 	"\t\t\tf.write(chunk)" + "\n" +
 	"\t\tprint('Created ' + filename)" + "\n" +
 	"\n" +
-	"api_key = '" + config.apiKey + "'\n" +
+	"api_key = '{apiKey}'\n" +
 	"base_url = '" + config.rootUrl + "'\n" +
 	"collection_id = {collectionId}" + "\n" +
 	"url = base_url + '/collections/' + collection_id + '/items' + '?key=' + api_key" + "\n" +
@@ -68,7 +68,7 @@ exports.collectionItem =
 	"\t\t\tf.write(chunk)" + "\n" +
 	"\t\tprint('Created ' + filename)" + "\n" +
 	"\n" +
-	"api_key = '" + config.apiKey + "'\n" +
+	"api_key = '{apiKey}'\n" +
 	"base_url = '" + config.rootUrl + "'\n" +
 	"collection_id = {collectionId}" + "\n" +
 	"collection_folder = 'collection_' + collection_id" + "\n" +
@@ -116,7 +116,7 @@ exports.itemTranscript =
 	"\t\t\tf.write(chunk)" + "\n" +
 	"\t\tprint('Created ' + filename)" + "\n" +
 	"\n" +
-	"api_key = '" + config.apiKey + "'\n" +
+	"api_key = '{apiKey}'\n" +
 	"base_url = '" + config.rootUrl + "'\n" +
 	"collection_id = {collectionId}" + "\n" +
 	"collection_folder = 'collection_' + collection_id" + "\n" +

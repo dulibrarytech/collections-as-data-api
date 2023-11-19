@@ -5,6 +5,7 @@ const config = require('../config/config'),
 	  UserService = require('../user/service.js')
 
 exports.validateKey = async function(req, res) {
+	// TODO validate master key. if false, then validate user
 	let isValid = await UserService.validateKey(req.query.key || "", req);
 	res.send({isValid:isValid})
 }

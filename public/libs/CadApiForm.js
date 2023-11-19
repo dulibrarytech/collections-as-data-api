@@ -5,7 +5,7 @@ const CadApiForm = (function() {
 	var initForm;
 	var onCheckTerms;
 	var onSelectEndpointOption;
-	var submitGetRequest;
+	var onClickFormGet;
 	var submitEmailAddress;
 	var setApiKey;
 	var onSelectParam;
@@ -26,8 +26,8 @@ const CadApiForm = (function() {
 	var enableTermsAcknowledgementCheckbox;
 
 	var config;
-	var cache;
 	var apiKey;
+	var cache;
 
 	initForm = function(configObject) {
 		var endpoint,
@@ -35,8 +35,11 @@ const CadApiForm = (function() {
 		    select = document.getElementById("endpoint-select");
 
 		config = configObject;
-		cache = {};
 		apiKey = "";
+		cache = {
+			collectionId: "",
+			itemId: []
+		};
 		resetDisplays();
 
 		// Add an option to the select box for each endpoint
@@ -70,8 +73,10 @@ const CadApiForm = (function() {
 
 	displayTemplate = function(endpointId) {
 		let templates = config.apiFormEndpoints[endpointId].templates || {}, url;
+
 		if(Object.keys(templates).length == 0) {
 			let codeDisplays = document.querySelectorAll(".code-display");
+
 			for(var display of codeDisplays) {
 				display.innerText = "Code is not available for this request";
 			}
@@ -80,12 +85,13 @@ const CadApiForm = (function() {
 			for(var key in templates) {
 				document.getElementById(key + "-display").innerHTML = "";
 				url = config.apiDomain + "/template/" + templates[key] + "?key=" + apiKey;
-				ajaxRequest("get", url, function(error, status, response) {
+
+				ajaxRequest("get", url, function(error, status, template) {
 					if(error) {
 						console.log(error);
 					}
 					else {
-						document.getElementById(key + "-display").innerHTML = renderTemplate(response, cache);
+						document.getElementById(key + "-display").innerHTML = renderTemplate(template, {...cache, apiKey});
 
 						// Show the copy text button
 						document.getElementById(key + "-display").nextElementSibling.style.display = "block";
@@ -96,10 +102,9 @@ const CadApiForm = (function() {
 	}
 
 	onSelectEndpointOption = function(endpointId) {
-		cache = {
-			collectionId: "",
-			itemId: []
-		};
+		cache['collectionId'] = "";
+		cache['itemId'] = [];
+
 		resetDisplays();
 		let endpoint = config.apiFormEndpoints[endpointId];
 		document.getElementById("endpoint-select").value = endpointId;
@@ -119,7 +124,7 @@ const CadApiForm = (function() {
 		}
 	}
 
-	submitGetRequest = function() {
+	onClickFormGet = function() {
 		clearResponseDisplay();
 		let uris = document.getElementById("query-display").value.split("\n\n"), 
 			urls = [];
@@ -130,7 +135,7 @@ const CadApiForm = (function() {
 			}
 		}
 
-		// Loop urls, fetch the object data. Add the object data to the data display
+		// Fetch the object data. Add the object data to the data display
 		let endchar = "", paramData;
 		for(var index=0; index < urls.length; index++) {
 			urls[index] += "?key=" + apiKey;
@@ -233,6 +238,7 @@ const CadApiForm = (function() {
 				response = JSON.parse(response);
 				if(response.isValid) {
 					apiKey = key;
+
 					document.getElementById("terms-ack").style.display = "flex";
 					resetForm();
 					document.getElementById("api-key-feedback").style.display = "block";
@@ -250,15 +256,16 @@ const CadApiForm = (function() {
 		});
 	}
 
-	renderTemplate = function(template, values) {
-		let name, 
+	renderTemplate = function(template, data) {
+		let key, 
 			value = "Unset",
 			params = template.match(/{(.*?)\}/g) || [];
 
 		for(var param of params) {
-			name = param.replace("{", "").replace("}", "");
-			if(cache[name]) {
-				value = JSON.stringify(cache[name]);
+			key = param.replace("{", "").replace("}", "");
+
+			if(data[key]) {
+				value = JSON.stringify(data[key]);
 				template = template.replace(param, value);
 			}
 			else {
@@ -538,8 +545,8 @@ const CadApiForm = (function() {
 		onSelectEndpointOption: function(endpointId) {
 			onSelectEndpointOption(endpointId);
 		},
-		submitGetRequest: function() {
-			submitGetRequest();
+		onClickFormGet: function() {
+			onClickFormGet();
 		},
 		submitEmailAddress: function() {
 			submitEmailAddress();
