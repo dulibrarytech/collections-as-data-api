@@ -185,8 +185,10 @@ exports.getItemData = function(collectionID, itemID) {
 						try {
 							if(response.hits.hits && response.hits.hits.length > 0) {
 								let item = response.hits.hits[0]._source || {};
+								let extension = item.object ? item.object.substring(item.object.length - 3) : null;
+
 								JsonParser.getItemMetadataValues(config.itemMetadataFields, item, data);
-								Formatter.getRepositoryResourceUrl(data);
+								Formatter.getRepositoryResourceUrl(data, extension);
 								fulfill(Helper.addMetadataAttributes(data));
 							}
 							else {

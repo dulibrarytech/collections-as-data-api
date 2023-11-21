@@ -1,5 +1,3 @@
-const config = require('../../config/config');
-
 exports.collectionItems = 
 	"import os, requests, json" + "\n" +
 	"from urllib.request import urlopen" + "\n" +
@@ -18,7 +16,7 @@ exports.collectionItems =
 	"\t\tprint('Created ' + filename)" + "\n" +
 	"\n" +
 	"api_key = {apiKey}" + "\n" +
-	"base_url = '" + config.rootUrl + "'\n" +
+	"base_url = \"{apiDomain}\"" + "\n" +
 	"collection_id = {collectionId}" + "\n" +
 	"url = base_url + '/collections/' + collection_id + '/items' + '?key=' + api_key" + "\n" +
 	"collection_folder = 'collection_' + collection_id" + "\n" +
@@ -43,10 +41,8 @@ exports.collectionItems =
 	"\t\n" +
 	"\titem_metadata_file.close()" + "\n" +
 	"\tzipObj.write(filename)" + "\n" +
-
-	"\textension = item_data['data']['Mime Type']['value'][0][-3:]" + "\n" +
-	"\turl = '" + config.repositoryDomain + "/datastream/' + item_id + '/object/' + item_id + '.' + extension" + "\n" +
-	"\tfilename = item_id + '_resource' + '.' + extension" + "\n" +
+	"\turl = item_data['data']['Resource URI']['value'][0]" + "\n" +
+	"\tfilename = item_id + '_resource' + '.' + url[-3:]" + "\n" +
 	"\tprint('Downloading file: ' + filename)" + "\n" +
 	"\tstream_to_file(url, filename)" + "\n" +
 	"\tzipObj.write(filename)";
@@ -69,7 +65,7 @@ exports.collectionItem =
 	"\t\tprint('Created ' + filename)" + "\n" +
 	"\n" +
 	"api_key = {apiKey}" + "\n" +
-	"base_url = '" + config.rootUrl + "'\n" +
+	"base_url = \"{apiDomain}\"" + "\n" +
 	"collection_id = {collectionId}" + "\n" +
 	"collection_folder = 'collection_' + collection_id" + "\n" +
 	"zipObj = ZipFile(collection_folder + '.zip', 'w')" + "\n" +
@@ -91,10 +87,8 @@ exports.collectionItem =
 	"\t\n" +
 	"\titem_metadata_file.close()" + "\n" +
 	"\tzipObj.write(filename)" + "\n" +
-
-	"\textension = item_data['data']['Mime Type']['value'][0][-3:]" + "\n" +
-	"\turl = '" + config.repositoryDomain + "/datastream/' + item_id + '/object/' + item_id + '.' + extension" + "\n" +
-	"\tfilename = item_id + '_resource' + '.' + extension" + "\n" +
+	"\turl = item_data['data']['Resource URI']['value'][0]" + "\n" +
+	"\tfilename = item_id + '_resource' + '.' + url[-3:]" + "\n" +
 	"\tprint('Downloading file: ' + filename)" + "\n" +
 	"\tstream_to_file(url, filename)" + "\n" +
 	"\tzipObj.write(filename)";
@@ -117,7 +111,7 @@ exports.itemTranscript =
 	"\t\tprint('Created ' + filename)" + "\n" +
 	"\n" +
 	"api_key = {apiKey}" + "\n" +
-	"base_url = '" + config.rootUrl + "'\n" +
+	"base_url = \"{apiDomain}\"" + "\n" +
 	"collection_id = {collectionId}" + "\n" +
 	"collection_folder = 'collection_' + collection_id" + "\n" +
 	"zipObj = ZipFile(collection_folder + '.zip', 'w')" + "\n" +
@@ -139,10 +133,8 @@ exports.itemTranscript =
 	"\t\n" +
 	"\titem_transcript_file.close()" + "\n" +
 	"\tzipObj.write(filename)" + "\n";
-
-	"\textension = item_data['data']['Mime Type']['value'][0][-3:]" + "\n" +
-	"\turl = '" + config.repositoryDomain + "/datastream/' + item_id + '/object/' + item_id + '.' + extension" + "\n" +
-	"\tfilename = item_id + '_resource' + '.' + extension" + "\n" +
+	"\turl = item_data['data']['Resource URI']['value'][0]" + "\n" +
+	"\tfilename = item_id + '_resource' + '.' + url[-3:]" + "\n" +	
 	"\tprint('Downloading file: ' + filename)" + "\n" +
 	"\tstream_to_file(url, filename)" + "\n" +
 	"\tzipObj.write(filename)";

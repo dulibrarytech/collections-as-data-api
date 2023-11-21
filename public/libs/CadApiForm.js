@@ -257,20 +257,23 @@ const CadApiForm = (function() {
 	}
 
 	renderTemplate = function(template, data) {
-		let key, 
-			value = "Unset",
-			params = template.match(/{(.*?)\}/g) || [];
+		let key;
+		let value = "Unset";
+
+		let params = template.match(/{(.*?)\}/g).map((param) => {
+				return param.replace(/[{|}]+/g, '');
+		}) || [];
+
+		template = template.replace('{apiDomain}', config.apiDomain);
 
 		for(var param of params) {
-			key = param.replace("{", "").replace("}", "");
-
-			if(data[key]) {
-				value = JSON.stringify(data[key]);
-				template = template.replace(param, value);
-			}
-			else {
-				template = template.replace(param, "");
-			}
+				if(data[param]) {
+					value = JSON.stringify(data[param]);
+					template = template.replace(new RegExp('{' + param + '}', 'g'), value);
+				}
+				else {
+					template = template.replace(new RegExp('{' + param + '}', 'g'), "");
+				}
 		}
 
 		return template;
