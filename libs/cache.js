@@ -13,25 +13,33 @@
 
  'use strict'
 
-const cache = require("../libs/cache.js");
+const NodeCache = require( "node-cache" );
+const CACHE = new NodeCache();
 
-var findUserByKey = async function(key) {
-	return new Promise(function(fulfill, reject) {
-		let userEmail = cache.read(key);
-		if(userEmail) fulfill(userEmail);
-		else fulfill(null);
-	});
+exports.read = function(key) {
+    let data = false;
+    let result = false;
+    
+    try {
+        result = CACHE.get(key);
+        if(result) data = result;
+    }
+    catch(e) {
+        console.error("Error reading from cache:", e)
+    }
+
+    return data;
 }
 
-var createUserRecord = async function(email, key) {
-	return new Promise(function(fulfill, reject) {
-		let created = cache.write(key, email)
-		if(created) fulfill(true);
-		else fulfill(null);
-	});
-}
+exports.write = function(key, data) {
+    let success = false;
 
-module.exports = {
-	findUserByKey,
-	createUserRecord
+    try {
+        success = CACHE.set(key, data);
+    }
+    catch(e) {
+        console.error("Error writing to cache:", e)
+    }
+
+    return success;
 }

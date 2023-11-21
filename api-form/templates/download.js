@@ -41,11 +41,13 @@ exports.collectionItems =
 	"\t\n" +
 	"\titem_metadata_file.close()" + "\n" +
 	"\tzipObj.write(filename)" + "\n" +
+	"\tos.remove(filename)" + "\n" +
 	"\turl = item_data['data']['Resource URI']['value'][0]" + "\n" +
 	"\tfilename = item_id + '_resource' + '.' + url[-3:]" + "\n" +
 	"\tprint('Downloading file: ' + filename)" + "\n" +
 	"\tstream_to_file(url, filename)" + "\n" +
-	"\tzipObj.write(filename)";
+	"\tzipObj.write(filename)" + "\n" +
+	"\tos.remove(filename)";
 
 exports.collectionItem = 
 	"import os, requests, json" + "\n" +
@@ -87,11 +89,13 @@ exports.collectionItem =
 	"\t\n" +
 	"\titem_metadata_file.close()" + "\n" +
 	"\tzipObj.write(filename)" + "\n" +
+	"\tos.remove(filename)" + "\n" +
 	"\turl = item_data['data']['Resource URI']['value'][0]" + "\n" +
 	"\tfilename = item_id + '_resource' + '.' + url[-3:]" + "\n" +
 	"\tprint('Downloading file: ' + filename)" + "\n" +
 	"\tstream_to_file(url, filename)" + "\n" +
-	"\tzipObj.write(filename)";
+	"\tzipObj.write(filename)" + "\n" +
+	"\tos.remove(filename)";
 
 exports.itemTranscript =
 	"import os, requests, json" + "\n" +
@@ -132,9 +136,11 @@ exports.itemTranscript =
 	"\t\titem_transcript_file.write(line)" + "\n" +
 	"\t\n" +
 	"\titem_transcript_file.close()" + "\n" +
-	"\tzipObj.write(filename)" + "\n";
+	"\tzipObj.write(filename)" + "\n" +
+	"\tos.remove(filename)" + "\n" +
 	"\turl = item_data['data']['Resource URI']['value'][0]" + "\n" +
 	"\tfilename = item_id + '_resource' + '.' + url[-3:]" + "\n" +	
 	"\tprint('Downloading file: ' + filename)" + "\n" +
 	"\tstream_to_file(url, filename)" + "\n" +
-	"\tzipObj.write(filename)";
+	"\tzipObj.write(filename)" + "\n" +
+	"\tos.remove(filename)";

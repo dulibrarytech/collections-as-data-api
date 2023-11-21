@@ -30,7 +30,7 @@ var validateKey = async function(key, req=null) {
 				isValid = true;
 			}
 		}
-		catch(e) {
+		catch(error) {
 			console.log("Error validating key: ", error);
 		}
 	}
@@ -48,12 +48,12 @@ var addUser = async function(email) {
 		let encKey = Keys.encryptString(newKey, "hex", "hex");
 		let encEmail = Keys.encryptString(email, "utf8", "hex");
 		let dbRecord = await Model.createUserRecord(encEmail, encKey);
-		console.log(`User added. New key is: ${newKey}, database id is: ${dbRecord}`)
+		console.log(`User added. New key is: ${newKey}`)
 		if(dbRecord) {
 			key = newKey;
 		}
 	}
-	catch(e) {
+	catch(error) {
 		console.log("Error adding user: ", error);
 	}
 
