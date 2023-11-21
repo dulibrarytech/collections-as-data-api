@@ -4,6 +4,7 @@ const CadApiForm = (function() {
 		
 	var initForm;
 	var onCheckTerms;
+	var ackTerms;
 	var onSelectEndpointOption;
 	var onClickFormGet;
 	var submitEmailAddress;
@@ -30,19 +31,22 @@ const CadApiForm = (function() {
 	var cache;
 
 	initForm = function(configObject) {
-		var endpoint,
-			option,
-		    select = document.getElementById("endpoint-select");
-
 		config = configObject;
 		apiKey = "";
+
 		cache = {
 			collectionId: "",
 			itemId: []
 		};
+
+		ackTerms = false;
+
 		resetDisplays();
 
 		// Add an option to the select box for each endpoint
+		let endpoint;
+		let option;
+		let select = document.getElementById("endpoint-select");
 		for(var index in config.apiFormEndpoints) {
 			endpoint = config.apiFormEndpoints[index];
 			option = document.createElement("OPTION");
@@ -53,21 +57,18 @@ const CadApiForm = (function() {
 	}
 
 	onCheckTerms = function(checkbox) {
-		if(checkbox.checked) {
+		if(ackTerms) {
 			document.getElementById("endpoint-select").classList.remove("disabled");
 			document.getElementById("get-submit").classList.remove("disabled");
 			document.getElementById("query-display").classList.remove("disabled");
 
-			// Disable uncheck terms once checked (remove else block)
+			// Disable uncheck terms once checked
 			document.getElementById("terms-check").classList.add("disabled");
 		}
 		else {
-			// Allow uncheck terms agree once checked
-			// document.getElementById("endpoint-select").classList.add("disabled");
-			// document.getElementById("get-submit").classList.add("disabled");
-			// document.getElementById("query-display").classList.add("disabled");
-			// resetDisplays();
-			// resetForm();
+			// If the terms page has not been opened, uncheck the box and show feedback message
+			document.getElementById("terms-check").checked = false;
+			alert("Please review the Terms of Use before using the form");
 		}
 	}
 
@@ -535,7 +536,7 @@ const CadApiForm = (function() {
 	}
 
 	enableTermsAcknowledgementCheckbox = function() {
-		document.getElementById("terms-check").disabled = false;
+		ackTerms = true;
 	}
 
 	return {
