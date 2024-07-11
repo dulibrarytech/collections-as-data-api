@@ -22,9 +22,9 @@ exports.sendApiKeyEmail = function(address, key, callback) {
 		ignoreTLS: config.mailServerPort != 465 // false for 465, true for other ports
 	});
 
-	var message = "Api key: " + key;
+	var message = "*** Automated email - Do not reply ***\n\nApi key: " + key;
 	var mailOptions = {
-		from: 'University of Denver Collections as Data API',
+		from: 'collections-as-data-api@du.edu',
 		to: address,
 		subject: 'Collections as Data API key request',
 		text: message
