@@ -1,27 +1,36 @@
 'use strict'
 
 const config = require('../config/config');
-const elasticsearch = require('elasticsearch');
+const { Client } = require('@elastic/elasticsearch');
 
-const client = new elasticsearch.Client( {  
-  hosts: [
-    config.elasticHost + ':' + config.elasticPort
-  ]
-});
+let elastic_client = null;
+let elasticDomain = `${config.elasticHost}:${config.elasticPort}`;
 
-client.cluster.health({},function(err,resp,status) {  
-	if(err) {
-		console.log("Elastic connection error:", err);
-		console.log("Could not connect to Elastic cluster");
-	}
-	else if(status == 200 && resp) {
-		console.log("Connected to Elastic cluster: " + config.elasticHost + ':' + config.elasticPort);
-		console.log("Using Elastic index: " + config.elasticIndex);
-	}
-	else {
-		console.log("Error: Elastic connection status is: " + status + " while contacting index on " + config.elasticHost + ':' + config.elasticPort);
-		console.log("Could not connect to Elastic cluster");
-	}
-});
+console.log(`Connecting to Elastic server at domain: ${elasticDomain}...`);
 
-module.exports = client;
+try {
+	elastic_client = new Client({
+		node: elasticDomain,
+		tls: {
+			rejectUnauthorized: false
+		}
+	});
+}
+catch (error) {
+	console.error(`Could not connect to Elastic server. Error: ${error}`);
+}
+
+if(elastic_client) {
+
+   elastic_client.info().then(function (response) {
+	 console.log(`Connected to Elastic server. Server info:`, response)
+
+   }, function (error) {
+	 console.error(`Could not connect to Elastic server. Elastic client error: ${error}`);
+   });
+}
+else {
+   console.log(`Cound not connect to Elastic server. No error report available`);
+}
+
+module.exports = elastic_client;

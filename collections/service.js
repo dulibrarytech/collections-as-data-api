@@ -280,20 +280,19 @@ exports.getItemTranscript = function(collectionID, itemID) {
 
 var queryIndex = function(data, callback) {
 	data["index"] = config.elasticIndex;
-	data["type"] = config.indexType;
 	data["from"] = 0;
 	data["size"] = 10000;
-	es.search(data, function(error, response, status) {
-		if(error) {
+
+	es.search(data).then(function (response) {
+		if(response) {
+		  	callback(null, response) 
+		}
+		else {
+		  	callback("Null search response from Elastic", null);
+		}
+	  }, function (error) {
 			console.error("Elastic error: %s", error.message);
 			console.error("Elastic returned a status of: %s", error.statusCode);
 			callback(error, null);
-		}
-		else if(status != 200) {
-			callback("Elastic server returned a status of " + status, null)
-		}
-		else {
-			callback(null, response);
-		}
-	});
+	  });
 }

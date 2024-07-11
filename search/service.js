@@ -323,7 +323,6 @@ exports.searchIndex = function(queryData, facets=null, collection=null, pageNum=
     // Create elasticsearch data object
     var data = {  
       index: config.elasticIndex,
-      type: config.indexType,
       body: {
         from : (pageNum - 1) * pageSize, 
         size : pageSize,
@@ -334,16 +333,15 @@ exports.searchIndex = function(queryData, facets=null, collection=null, pageNum=
     }
 
     // Query the index
-    es.search(data, function (error, response, status) {
-      if(error) {
-        callback(error, {});
-      }
-      else if(status != 200) {
-        callback("Elastic server returned a status of " + status);
-      }
-      else {
+    es.search(data).then(function (response) {
+      if(response) {
         callback(null, response) 
       }
+      else {
+        callback("Null search response from Elastic", {});
+      }
+    }, function (error) {
+      callback(error, {});
     });
 }
 
@@ -352,20 +350,18 @@ exports.luceneSearchIndex = function(queryString, page, pageSize, callback) {
       from: page,
       size: pageSize,
       index: config.elasticIndex,
-      type: config.indexType,
       q: queryString
   }
 
   // Query the index
-  es.search(data, function (error, response, status) {
-    if(error) {
-      callback(error, {});
-    }
-    else if(status != 200) {
-      callback("Elastic server returned a status of " + status);
-    }
-    else {
+  es.search(data).then(function (response) {
+    if(response) {
       callback(null, response) 
     }
+    else {
+      callback("Null search response from Elastic", {});
+    }
+  }, function (error) {
+    callback(error, {});
   });
 }
